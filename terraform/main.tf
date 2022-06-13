@@ -38,16 +38,14 @@ resource "azurerm_service_plan" "main" {
   os_type = "Linux"
 }
 
-resource "azurerm_function_app" "main" {
+resource "azurerm_linux_function_app" "main" {
   name = "${var.service_name}-azfunc"
-  location = var.location
   resource_group_name = azurerm_resource_group.main.name
+  location = var.location
+  
   app_service_plan_id = azurerm_service_plan.main.id
   storage_account_name = azurerm_storage_account.main.name
   storage_account_access_key = azurerm_storage_account.main.primary_access_key
 
-  site_config {
-    always_on = true
-  }
-  version = "~3"
+  site_config {}
 }
