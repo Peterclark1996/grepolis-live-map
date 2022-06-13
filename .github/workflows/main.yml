@@ -1,0 +1,34 @@
+name: grepolis-live-map CICD
+
+on:
+  push:
+    branches: [ main ]
+    
+env:
+  TERRAFORM_RESOURCE_GROUP: ${{ 'terraform' }}
+  TERRAFORM_STORAGE_ACCOUNT: ${{ 'peteterraformsa' }}
+  TERRAFORM_CONTAINER: ${{ 'state' }}
+  TERRAFORM_KEY: ${{ 'grepolislivemap' }}
+  TERRAFORM_ACCESS_KEY: ${{ secrets.TERRAFORM_ACCESS_KEY }}
+  SERVICE_NAME: ${{ 'grepolis-live-map' }}
+  SERVICE_LOCATION: ${{ 'UK South' }}
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+jobs:
+  steps:
+  - uses: hashicorp/setup-terraform@v2
+
+  - name: Terraform Init
+    id: init
+    run: terraform init -backend-config="resource_group_name=$TERRAFORM_RESOURCE_GROUP" -backend-config="storage_account_name=$TERRAFORM_STORAGE_ACCOUNT" -backend-config="container_name=$TERRAFORM_CONTAINER" -backend-config="key=$TERRAFORM_KEY" -backend-config="access_key=$TERRAFORM_ACCESS_KEY" 
+
+  - name: Terraform Plan
+    id: plan
+    run: terraform plan -out=plan -var="service_name=$SERVICE_NAME" -var="location=$SERVICE_LOCATION" -var="subscription_id=$AZURE_SUBSCRIPTION_ID" -var="tenant_id=$AZURE_TENANT_ID" -var="client_id=$AZURE_CLIENT_ID" -var="client_secret=$AZURE_CLIENT_SECRET"
+
+  - name: Terraform Apply
+    id: apply
+    run: terraform apply "plan"

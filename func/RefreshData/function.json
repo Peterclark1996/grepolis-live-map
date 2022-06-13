@@ -1,0 +1,11 @@
+{
+  "bindings": [
+    {
+      "name": "RefreshData",
+      "type": "timerTrigger",
+      "direction": "in",
+      "schedule": "0 * * * * *"
+    }
+  ],
+  "scriptFile": "../dist/RefreshData/index.js"
+}
