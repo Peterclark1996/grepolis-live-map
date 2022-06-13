@@ -6,7 +6,8 @@ on:
 
 jobs:
   infrastructure:
-    name: infrastructure
+    name: Infrastructure
+    runs-on: ubuntu-latest
     env:
       TERRAFORM_RESOURCE_GROUP: ${{ 'terraform' }}
       TERRAFORM_STORAGE_ACCOUNT: ${{ 'peteterraformsa' }}
