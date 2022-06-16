@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  infrastructure:
+  build-and-deploy:
     name: Infrastructure
     runs-on: ubuntu-latest
     env:
@@ -14,12 +14,13 @@ jobs:
       TERRAFORM_CONTAINER: ${{ 'state' }}
       TERRAFORM_KEY: ${{ 'grepolislivemap' }}
       TERRAFORM_ACCESS_KEY: ${{ secrets.TERRAFORM_ACCESS_KEY }}
-      SERVICE_NAME: ${{ 'grepolis-live-map' }}
       SERVICE_LOCATION: ${{ 'UK South' }}
+      SERVICE_NAME: ${{ 'grepolis-live-map' }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      NODE_VERSION: "14.x"
     steps:
     - uses: hashicorp/setup-terraform@v2
 
@@ -40,3 +41,43 @@ jobs:
       id: apply
       working-directory: ./terraform
       run: terraform apply "plan"
+
+    - name: Setup Node ${{ env.NODE_VERSION }} Environment
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Build and Test
+      shell: bash
+      run: |
+        pushd './func'
+        npm install
+        npm run build --if-present
+        npm run test --if-present
+        popd
+
+    - name: Login to Azure
+     	uses: azure/login@v1
+     	with:
+       	creds: {"appId": "$AZURE_CLIENT_ID","password": "$AZURE_CLIENT_SECRET","tenant": "$AZURE_TENANT_ID"}
+       	enable-AzPSSession: true
+
+    - name: Fetch Publishing Profile
+     	id: profilefetch
+     	uses: azure/powershell@v1
+     	with:
+       	inlineScript: |
+           	$profile = ""
+           	$profile = Get-AzWebAppPublishingProfile -ResourceGroupName $env:AZURE_RESOURCE_GROUP_NAME -Name $env:AZURE_FUNCTIONAPP_NAME
+           	$profile = $profile.Replace("`r", "").Replace("`n", "")
+           	Write-Output "::set-output name=pubprofile::$profile"
+           	Remove-Variable profile
+       	azPSVersion: "latest"
+
+    - name: Deploy
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: ${{ env.SERVICE_NAME }}
+        package: func
+        publish-profile: ${{ steps.profilefetch.outputs.pubprofile }}
