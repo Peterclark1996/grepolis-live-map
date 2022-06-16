@@ -46,12 +46,13 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ env.NODE_VERSION }}
-        
-    - run: |
-        npm install
-        npm build
-        npm test
+
+    - name: Build and Test
       working-directory: ./func
+      run: |
+        npm install \
+        npm build \
+        npm test \
 
     - name: Login to Azure
      	uses: azure/login@v1
@@ -64,11 +65,11 @@ jobs:
      	uses: azure/powershell@v1
      	with:
        	inlineScript: |
-           	$profile = ""
-           	$profile = Get-AzWebAppPublishingProfile -ResourceGroupName $env:AZURE_RESOURCE_GROUP_NAME -Name $env:AZURE_FUNCTIONAPP_NAME
-           	$profile = $profile.Replace("`r", "").Replace("`n", "")
-           	Write-Output "::set-output name=pubprofile::$profile"
-           	Remove-Variable profile
+          $profile = ""
+          $profile = Get-AzWebAppPublishingProfile -ResourceGroupName $env:AZURE_RESOURCE_GROUP_NAME -Name $env:AZURE_FUNCTIONAPP_NAME
+          $profile = $profile.Replace("`r", "").Replace("`n", "")
+          Write-Output "::set-output name=pubprofile::$profile"
+          Remove-Variable profile
        	azPSVersion: "latest"
 
     - name: Deploy
