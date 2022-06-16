@@ -61,16 +61,16 @@ jobs:
         enable-AzPSSession: true 
 
     - name: Fetch Publishing Profile
-     	id: profilefetch
-     	uses: azure/powershell@v1
-     	with:
-       	inlineScript: |
+      id: profilefetch
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
           $profile = ""
           $profile = Get-AzWebAppPublishingProfile -ResourceGroupName $env:AZURE_RESOURCE_GROUP_NAME -Name $env:AZURE_FUNCTIONAPP_NAME
           $profile = $profile.Replace("`r", "").Replace("`n", "")
           Write-Output "::set-output name=pubprofile::$profile"
           Remove-Variable profile
-       	azPSVersion: "latest"
+        azPSVersion: "latest"
 
     - name: Deploy
       uses: Azure/functions-action@v1
