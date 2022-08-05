@@ -57,7 +57,7 @@ jobs:
     - name: Login to Azure
       uses: azure/login@v1
       with:
-        creds: "{\"appId\": \"${{ secrets.AZURE_CLIENT_ID }}\",\"password\": \"${{ secrets.AZURE_CLIENT_SECRET }}\",\"tenant\": \"${{ secrets.AZURE_TENANT_ID }}\"}"
+        creds: "${{ secrets.AZURE_CREDENTIALS }}"
         enable-AzPSSession: true 
 
     - name: Fetch Publishing Profile
