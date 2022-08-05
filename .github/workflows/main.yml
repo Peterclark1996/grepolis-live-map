@@ -67,7 +67,7 @@ jobs:
       with:
         inlineScript: |
           $profile = ""
-          $profile = Get-AzWebAppPublishingProfile -ResourceGroupName $env:AZURE_RESOURCE_GROUP_NAME -Name $env:AZURE_FUNCTIONAPP_NAME
+          $profile = Get-AzWebAppPublishingProfile -ResourceGroupName ${{ env.AZURE_RESOURCE_GROUP_NAME }} -Name ${{ env.AZURE_FUNCTIONAPP_NAME }}
           $profile = $profile.Replace("`r", "").Replace("`n", "")
           Write-Output "::set-output name=pubprofile::$profile"
           Remove-Variable profile
