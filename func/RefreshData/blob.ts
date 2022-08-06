@@ -1,0 +1,1 @@
+export const saveWorldDataFile = (fileName: String) => Promise.resolve()

@@ -1,0 +1,1 @@
+export const fetchWorldCodeList = () => Promise.resolve(["en137"])
