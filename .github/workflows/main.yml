@@ -21,7 +21,6 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      NODE_VERSION: "14.x"
     steps:
     - uses: hashicorp/setup-terraform@v2
 
@@ -43,17 +42,22 @@ jobs:
       working-directory: ./terraform
       run: terraform apply "plan"
 
-    - name: Setup Node ${{ env.NODE_VERSION }} Environment
+    - name: Setup Node Environment
       uses: actions/setup-node@v2
       with:
-        node-version: ${{ env.NODE_VERSION }}
+        node-version: 14.x
 
-    - name: Build and Test
+    - name: Func Install
       working-directory: ./func
-      run: |
-        npm install \
-        npm build \
-        npm test \
+      run: npm install
+
+    - name: Func build
+      working-directory: ./func
+      run: npm run build
+
+    - name: Func test
+      working-directory: ./func
+      run: npm test
 
     - name: Login to Azure
       uses: azure/login@v1

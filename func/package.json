@@ -9,9 +9,9 @@
     "start": "func start",
     "test": "echo \"No tests yet...\""
   },
-  "dependencies": {},
   "devDependencies": {
     "@azure/functions": "^3.0.0",
+    "@types/node": "^18.6.4",
     "typescript": "^4.0.0"
   }
 }
