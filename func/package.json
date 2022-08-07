@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
+    "build": "tsc --project tsconfig.build.json",
     "prestart": "npm run build",
     "start": "func start",
     "test": "jest"

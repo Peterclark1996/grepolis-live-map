@@ -6,13 +6,15 @@ export const generateDataForWorlds = async (
 ): Promise<void> => {
     const worldCodes = await grepolisFunctions.fetchWorldCodeList()
 
-    worldCodes.forEach(async worldCode => {
+    await Promise.all(worldCodes.map(async worldCode => {
         const alliances = await grepolisFunctions.fetchAlliances(worldCode)
+        const players = await grepolisFunctions.fetchPlayers(worldCode)
 
         const worldData = {
-            alliances
+            alliances,
+            players
         }
 
         saveWorldDataFile(worldCode, worldData)
-    })
+    }))
 }
