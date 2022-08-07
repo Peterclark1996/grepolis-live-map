@@ -70,6 +70,7 @@ jobs:
       with:
         inlineScript: |
           az functionapp config appsettings set --name "${{ env.SERVICE_NAME }}-azfunc" --resource-group "${{ env.SERVICE_NAME }}-rg" --settings "AZURE_STORAGE_CONNECTION=${{ secrets.AZURE_STORAGE_CONNECTION }}"
+        azPSVersion: "latest"
 
     - name: Fetch Publishing Profile
       id: profilefetch
