@@ -16,7 +16,8 @@ const timerTrigger: AzureFunction = async (context: Context, myTimer: any): Prom
 
     return generateDataForWorlds(
         grepolisFunctions,
-        saveWorldDataFile
+        saveWorldDataFile,
+        () => new Date()
     )
         .then(_ => context.log(`Function finished at ${new Date()}.`))
         .catch(error => console.error(`Function failed at ${new Date()}. ${error}`))

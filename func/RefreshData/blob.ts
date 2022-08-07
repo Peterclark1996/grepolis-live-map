@@ -1,1 +1,3 @@
-export const saveWorldDataFile = (fileName: String) => Promise.resolve()
+import { WorldData } from "./types/WorldData"
+
+export const saveWorldDataFile = (worldCode: string, fileName: string, worldData: WorldData) => Promise.resolve()
