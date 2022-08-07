@@ -1,12 +1,21 @@
 import { AzureFunction, Context } from "@azure/functions"
 import { saveWorldDataFile } from "./blob"
-import { fetchWorldCodeList } from "./grepolis"
+import { fetchAlliances, fetchIslands, fetchPlayers, fetchTowns, fetchWorldCodeList } from "./grepolis"
 import { generateDataForWorlds } from "./logic"
 
 const timerTrigger: AzureFunction = async (context: Context, myTimer: any): Promise<void> => {
     context.log(`Function triggered at ${new Date()}.`)
-    return generateDataForWorlds(
+
+    const grepolisFunctions = {
         fetchWorldCodeList,
+        fetchAlliances,
+        fetchPlayers,
+        fetchTowns,
+        fetchIslands
+    }
+
+    return generateDataForWorlds(
+        grepolisFunctions,
         saveWorldDataFile
     )
         .then(_ => context.log(`Function finished at ${new Date()}.`))

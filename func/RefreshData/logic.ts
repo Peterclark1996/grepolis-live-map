@@ -1,8 +1,18 @@
-export const generateDataForWorlds = async (
-    fetchWorldCodeList: () => Promise<Array<string>>,
-    saveWorldDataFile: (worldName: string) => Promise<void>
-): Promise<void> => {
-    const worldCodes = await fetchWorldCodeList()
+import { GrepolisFunctions } from "./types/GrepolisFunctions"
 
-    worldCodes.forEach(worldCode => saveWorldDataFile(worldCode))
+export const generateDataForWorlds = async (
+    grepolisFunctions: GrepolisFunctions,
+    saveWorldDataFile: (worldCode: string, worldData) => Promise<void>
+): Promise<void> => {
+    const worldCodes = await grepolisFunctions.fetchWorldCodeList()
+
+    worldCodes.forEach(async worldCode => {
+        const alliances = await grepolisFunctions.fetchAlliances(worldCode)
+
+        const worldData = {
+            alliances
+        }
+
+        saveWorldDataFile(worldCode, worldData)
+    })
 }
