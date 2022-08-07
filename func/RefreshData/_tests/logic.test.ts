@@ -31,7 +31,7 @@ test('Alliance data is generated as expected', async () => {
 
     expect(saveWorldDataFile.mock.calls.length).toBe(1)
     expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")
-    expect(saveWorldDataFile.mock.calls[0][1]).toStrictEqual({ alliances: [inputAlliance], players: [] })
+    expect(saveWorldDataFile.mock.calls[0][1]).toStrictEqual({ alliances: [inputAlliance], players: [], towns: [] })
 
 })
 
@@ -53,6 +53,6 @@ test('Player data is generated as expected', async () => {
 
     expect(saveWorldDataFile.mock.calls.length).toBe(1)
     expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")
-    expect(saveWorldDataFile.mock.calls[0][1]).toStrictEqual({ alliances: [], players: [inputPlayer] })
+    expect(saveWorldDataFile.mock.calls[0][1]).toStrictEqual({ alliances: [], players: [inputPlayer], towns: [] })
 
 })
