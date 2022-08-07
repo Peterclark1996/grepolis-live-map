@@ -10,7 +10,8 @@ type actParams = {
     fetchPlayers?: (worldCode: string) => Promise<Player[]>,
     fetchTowns?: (worldCode: string) => Promise<GrepolisTown[]>,
     fetchIslands?: (worldCode: string) => Promise<Island[]>,
-    saveWorldDataFile?: (worldName: string) => Promise<void>
+    saveWorldDataFile?: (worldName: string) => Promise<void>,
+    getCurrentDate?: () => Date
 }
 
 export const act = (passedParams: actParams): Promise<void> =>
@@ -22,7 +23,8 @@ export const act = (passedParams: actParams): Promise<void> =>
             fetchTowns: passedParams.fetchTowns || (() => Promise.resolve([])),
             fetchIslands: passedParams.fetchIslands || (() => Promise.resolve([]))
         },
-        passedParams.saveWorldDataFile || (() => Promise.resolve())
+        passedParams.saveWorldDataFile || (() => Promise.resolve()),
+        passedParams.getCurrentDate || (() => new Date())
     )
 
 export const randomNumber = (from: number = 1, to: number = 100) => Math.floor((Math.random() * to) + from)

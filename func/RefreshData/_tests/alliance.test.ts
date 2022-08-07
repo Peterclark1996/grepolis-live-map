@@ -18,7 +18,7 @@ test('Alliance data is fetched and saved to blob', async () => {
 
     expect(saveWorldDataFile.mock.calls.length).toBe(1)
     expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")
-    expect(saveWorldDataFile.mock.calls[0][1]).toStrictEqual({ alliances: [inputAlliance], players: [], towns: [] })
+    expect(saveWorldDataFile.mock.calls[0][2]).toStrictEqual({ alliances: [inputAlliance], players: [], towns: [] })
 
 })
 
@@ -48,6 +48,6 @@ test('Alliances with no towns are not saved to blob', async () => {
 
     expect(saveWorldDataFile.mock.calls.length).toBe(1)
     expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")
-    expect(saveWorldDataFile.mock.calls[0][1]).toStrictEqual({ alliances: [validInputAlliance], players: [], towns: [] })
+    expect(saveWorldDataFile.mock.calls[0][2]).toStrictEqual({ alliances: [validInputAlliance], players: [], towns: [] })
 
 })

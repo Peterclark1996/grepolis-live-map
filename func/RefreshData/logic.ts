@@ -8,7 +8,8 @@ import "./number.extensions"
 
 export const generateDataForWorlds = async (
     grepolisFunctions: GrepolisFunctions,
-    saveWorldDataFile: (worldCode: string, worldData: WorldData) => Promise<void>
+    saveWorldDataFile: (worldCode: string, fileName: string, worldData: WorldData) => Promise<void>,
+    getCurrentDate: () => Date
 ): Promise<void> => {
     const worldCodes = await grepolisFunctions.fetchWorldCodeList()
 
@@ -26,7 +27,10 @@ export const generateDataForWorlds = async (
             towns: positionedTowns
         }
 
-        saveWorldDataFile(worldCode, worldData)
+        const currentDate = getCurrentDate()
+        const fileName = `${currentDate.getUTCFullYear()}_${String(currentDate.getUTCMonth() + 1).padStart(2, '0')}_${String(currentDate.getUTCDate()).padStart(2, '0')}`
+
+        saveWorldDataFile(worldCode, fileName, worldData)
     }))
 }
 
