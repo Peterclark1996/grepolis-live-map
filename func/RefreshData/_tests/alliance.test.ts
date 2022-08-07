@@ -1,19 +1,6 @@
 import { act, randomNumber, randomString } from "./common"
 
-test('World data files are generated for given worlds', async () => {
-
-    const fetchWorldCodeList = () => Promise.resolve(["en01", "en02"])
-    const saveWorldDataFile = jest.fn()
-
-    await act({ fetchWorldCodeList, saveWorldDataFile })
-
-    expect(saveWorldDataFile.mock.calls.length).toBe(2)
-    expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")
-    expect(saveWorldDataFile.mock.calls[1][0]).toStrictEqual("en02")
-
-})
-
-test('Alliance data is generated as expected', async () => {
+test('Alliance data is fetched and saved to blob', async () => {
 
     const inputAlliance = {
         id: randomNumber(),
@@ -35,24 +22,32 @@ test('Alliance data is generated as expected', async () => {
 
 })
 
-test('Player data is generated as expected', async () => {
+test('Alliances with no towns are not saved to blob', async () => {
 
-    const inputPlayer = {
+    const validInputAlliance = {
         id: randomNumber(),
         name: randomString(),
-        alliance: randomNumber(),
         points: randomNumber(),
-        rank: randomNumber(),
-        towns: randomNumber()
+        towns: 10,
+        players: randomNumber(),
+        rank: randomNumber()
+    }
+    const invalidInputAlliance = {
+        id: randomNumber(),
+        name: randomString(),
+        points: randomNumber(),
+        towns: 0,
+        players: randomNumber(),
+        rank: randomNumber()
     }
     const fetchWorldCodeList = () => Promise.resolve(["en01"])
-    const fetchPlayers = () => Promise.resolve([inputPlayer])
+    const fetchAlliances = () => Promise.resolve([validInputAlliance, invalidInputAlliance])
     const saveWorldDataFile = jest.fn()
 
-    await act({ fetchWorldCodeList, fetchPlayers, saveWorldDataFile })
+    await act({ fetchWorldCodeList, fetchAlliances, saveWorldDataFile })
 
     expect(saveWorldDataFile.mock.calls.length).toBe(1)
     expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")
-    expect(saveWorldDataFile.mock.calls[0][1]).toStrictEqual({ alliances: [], players: [inputPlayer], towns: [] })
+    expect(saveWorldDataFile.mock.calls[0][1]).toStrictEqual({ alliances: [validInputAlliance], players: [], towns: [] })
 
 })

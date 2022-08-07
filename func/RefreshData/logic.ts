@@ -21,8 +21,8 @@ export const generateDataForWorlds = async (
         const positionedTowns = calculateAbsoluteTownPositions(towns, islands)
 
         const worldData = {
-            alliances,
-            players,
+            alliances: alliances.filter(alliance => alliance.towns > 0),
+            players: players.filter(player => player.towns > 0),
             towns: positionedTowns
         }
 

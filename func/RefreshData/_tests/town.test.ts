@@ -1,6 +1,6 @@
 import { act, randomNumber, randomString } from "./common"
 
-test('Town data is generated as expected', async () => {
+test('Town data is fetched and saved to blob with calculated position values', async () => {
 
     const inputTown = {
         id: randomNumber(),
