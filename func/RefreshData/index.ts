@@ -20,7 +20,10 @@ const timerTrigger: AzureFunction = async (context: Context, myTimer: any): Prom
         () => new Date()
     )
         .then(_ => context.log(`Function finished at ${new Date()}.`))
-        .catch(error => console.error(`Function failed at ${new Date()}. ${error}`))
+        .catch(error => {
+            console.error(`Function failed at ${new Date()}`)
+            throw error
+        })
 }
 
 export default timerTrigger
