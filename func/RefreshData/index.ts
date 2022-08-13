@@ -1,5 +1,5 @@
 import { AzureFunction, Context } from "@azure/functions"
-import { saveWorldDataFile } from "./blob"
+import { getOceanFileNames, saveOceanFile, saveWorldDataFile } from "./blob"
 import { fetchAlliances, fetchIslands, fetchPlayers, fetchTowns, fetchWorldCodeList } from "./grepolis"
 import { generateDataForWorlds } from "./logic"
 
@@ -17,6 +17,8 @@ const timerTrigger: AzureFunction = async (context: Context, myTimer: any): Prom
     return generateDataForWorlds(
         grepolisFunctions,
         saveWorldDataFile,
+        saveOceanFile,
+        getOceanFileNames,
         () => new Date()
     )
         .then(_ => context.log(`Function finished at ${new Date()}.`))

@@ -1,9 +1,59 @@
 import { IslandOffset } from "./types/IslandOffset"
 
+export const OCEAN_PIXEL_SIZE = 1000
+export const OCEAN_OVERLAP = 20
+
 export const TOWN_OFFSET_RATIO = 0.0085
 export const TOWN_MAX_SIZE = 0.25
 export const TOWN_MIN_SIZE = 0.1
 export const TOWN_MAX_POINTS = 17786
+
+export const IMAGE_PATH = "./RefreshData/img/"
+
+export const ISLAND_SCALE = 0.0775
+
+export const islandImagesNames = {
+    1: "island1.png",
+    2: "island2.png",
+    3: "island3.png",
+    4: "island4.png",
+    5: "island5.png",
+    6: "island6.png",
+    7: "island7.png",
+    8: "island8.png",
+    9: "island9.png",
+    10: "island10.png",
+    11: "uninhabited1.png",
+    12: "uninhabited2.png",
+    13: "uninhabited3.png",
+    14: "uninhabited4.png",
+    15: "uninhabited5.png",
+    16: "uninhabited6.png",
+    37: "island11.png",
+    38: "island12.png",
+    39: "island13.png",
+    40: "island14.png",
+    41: "island15.png",
+    42: "island16.png",
+    43: "island17.png",
+    44: "island18.png",
+    45: "island19.png",
+    46: "island20.png",
+    47: "uninhabited7.png",
+    48: "uninhabited8.png",
+    49: "uninhabited9.png",
+    50: "uninhabited10.png",
+    51: "uninhabited11.png",
+    52: "uninhabited12.png",
+    53: "uninhabited13.png",
+    54: "uninhabited14.png",
+    55: "uninhabited15.png",
+    56: "uninhabited16.png",
+    57: "uninhabited17.png",
+    58: "uninhabited18.png",
+    59: "uninhabited19.png",
+    60: "uninhabited20.png",
+}
 
 export const islandPositionOffsetMatrix: IslandOffset[] = [
     { islandType: 1, xOffset: 451, yOffset: -130, posOnIsland: 0 },
