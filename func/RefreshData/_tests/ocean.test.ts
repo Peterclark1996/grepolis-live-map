@@ -23,7 +23,7 @@ test('Ocean data is generated and saved to blob', async () => {
 test('Oceans that already have image files are not saved to blob', async () => {
     const fetchWorldCodeList = () => Promise.resolve(["en01"])
     const saveOceanFile = jest.fn()
-    const oceanNames = ["0_0.png", "3_7.png", "6_9.png", "9_9.png"]
+    const oceanNames = ["en01/ocean/0_0.png", "en01/ocean/3_7.png", "en01/ocean/6_9.png", "en01/ocean/9_9.png"]
     const getOceanFileNames = () => Promise.resolve(oceanNames)
 
     await act({ fetchWorldCodeList, saveOceanFile, getOceanFileNames })
@@ -32,7 +32,7 @@ test('Oceans that already have image files are not saved to blob', async () => {
     for (let x = 0; x < 10; x++) {
         for (let y = 0; y < 10; y++) {
             const filename = `${x}_${y}`
-            if (!oceanNames.includes(filename)) {
+            if (filename !== "0_0" && filename !== "3_7" && filename !== "6_9" && filename !== "9_9") {
                 oceanStrings.push(filename)
             }
         }

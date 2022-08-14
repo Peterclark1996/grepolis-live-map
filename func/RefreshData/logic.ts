@@ -11,7 +11,7 @@ import Jimp from "jimp"
 export const generateDataForWorlds = async (
     grepolisFunctions: GrepolisFunctions,
     saveWorldDataFile: (worldCode: string, fileName: string, worldData: WorldData) => Promise<void>,
-    saveOceanFile: (worldCode: string, fileName: string, oceanData: string) => Promise<void>,
+    saveOceanFile: (worldCode: string, fileName: string, oceanData: Buffer) => Promise<void>,
     getOceanFileNames: (worldCode: string) => Promise<string[]>,
     getCurrentDate: () => Date
 ): Promise<void> => {
@@ -41,7 +41,8 @@ export const generateDataForWorlds = async (
 
         for (const ocean of oceans) {
             const fileName = `${ocean.x}_${ocean.y}`
-            if (existingOceanFiles.includes(fileName)) continue
+
+            if (existingOceanFiles.includes(`${worldCode}/ocean/${fileName}.png`)) continue
 
             const oceanImageData = await generateOceanImage(ocean, islands)
             saveOceanFile(worldCode, fileName, oceanImageData)
@@ -95,10 +96,7 @@ const generateOceanImage = async (ocean: Ocean, islands: Island[]) => {
             i.y < islandBoundMaxY
         )
 
-    if (islandsInOcean.length == 0) return
-
     const oceanImage = await Jimp.read(IMAGE_PATH + "sea.png")
-    oceanImage.resize(1000, 1000)
 
     for (const island of islandsInOcean) {
         const islandImage = await getIslandImage(island.islandType)
@@ -111,8 +109,16 @@ const generateOceanImage = async (ocean: Ocean, islands: Island[]) => {
         )
     }
 
-    return await oceanImage.getBase64Async(Jimp.MIME_PNG)
+    return convertJimpToBuffer(oceanImage)
 }
+
+const convertJimpToBuffer = (image: Jimp) =>
+    new Promise<Buffer>((resolve, reject) => {
+        image.getBuffer(Jimp.MIME_PNG, (error, buffer) => {
+            if (error) reject(error)
+            else resolve(buffer)
+        })
+    })
 
 const getOceanList = (): Ocean[] => {
     const oceanList: Ocean[] = []
@@ -124,11 +130,20 @@ const getOceanList = (): Ocean[] => {
     return oceanList
 }
 
+let cachedIslandImages: { [key: string]: Jimp } = {}
+
 const getIslandImage = async (islandId: number) => {
     const imageFileName = islandImagesNames[islandId]
     if (!imageFileName) return
 
+    if (cachedIslandImages[imageFileName]) {
+        return cachedIslandImages[imageFileName]
+    }
+
     const islandImage = await Jimp.read(IMAGE_PATH + imageFileName)
+
+    cachedIslandImages[imageFileName] = islandImage
+
     islandImage.resize(islandImage.bitmap.width * ISLAND_SCALE, islandImage.bitmap.height * ISLAND_SCALE)
     return islandImage
 }

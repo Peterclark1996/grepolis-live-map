@@ -11,7 +11,7 @@ type actParams = {
     fetchTowns?: (worldCode: string) => Promise<GrepolisTown[]>,
     fetchIslands?: (worldCode: string) => Promise<Island[]>,
     saveWorldDataFile?: (worldName: string) => Promise<void>,
-    saveOceanFile?: (worldName: string, fileName: string, imageData: string) => Promise<void>,
+    saveOceanFile?: (worldName: string, fileName: string, imageData: Buffer) => Promise<void>,
     getOceanFileNames?: (worldName: string) => Promise<string[]>,
     getCurrentDate?: () => Date
 }
