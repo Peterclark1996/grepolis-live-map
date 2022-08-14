@@ -3,6 +3,7 @@ import { Alliance } from "../types/Alliance"
 import { Island } from "../types/Island"
 import { Player } from "../types/Player"
 import { GrepolisTown } from "../types/GrepolisTown"
+import Jimp from "jimp"
 
 type actParams = {
     fetchWorldCodeList?: () => Promise<string[]>,
@@ -11,7 +12,7 @@ type actParams = {
     fetchTowns?: (worldCode: string) => Promise<GrepolisTown[]>,
     fetchIslands?: (worldCode: string) => Promise<Island[]>,
     saveWorldDataFile?: (worldName: string) => Promise<void>,
-    saveOceanFile?: (worldName: string, fileName: string, imageData: Buffer) => Promise<void>,
+    saveOceanFile?: (worldName: string, fileName: string, image: Jimp) => Promise<void>,
     getOceanFileNames?: (worldName: string) => Promise<string[]>,
     getCurrentDate?: () => Date
 }

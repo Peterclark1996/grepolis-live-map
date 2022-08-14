@@ -37,7 +37,7 @@ test('Town data is fetched and saved to blob with calculated position values', a
     expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")
     expect(saveWorldDataFile.mock.calls[0][2]).toStrictEqual({ alliances: [], players: [], towns: [expectedTown] })
 
-}, 15000)
+})
 
 test('Towns with missing islands are not saved to blob', async () => {
 
@@ -93,4 +93,4 @@ test('Towns with invalid island positions are not saved to blob', async () => {
     expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")
     expect(saveWorldDataFile.mock.calls[0][2]).toStrictEqual({ alliances: [], players: [], towns: [] })
 
-}, 15000)
+})

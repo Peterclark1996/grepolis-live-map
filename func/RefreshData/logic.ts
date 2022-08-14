@@ -11,7 +11,7 @@ import Jimp from "jimp"
 export const generateDataForWorlds = async (
     grepolisFunctions: GrepolisFunctions,
     saveWorldDataFile: (worldCode: string, fileName: string, worldData: WorldData) => Promise<void>,
-    saveOceanFile: (worldCode: string, fileName: string, oceanData: Buffer) => Promise<void>,
+    saveOceanFile: (worldCode: string, fileName: string, image: Jimp) => Promise<void>,
     getOceanFileNames: (worldCode: string) => Promise<string[]>,
     getCurrentDate: () => Date
 ): Promise<void> => {
@@ -44,8 +44,8 @@ export const generateDataForWorlds = async (
 
             if (existingOceanFiles.includes(`${worldCode}/ocean/${fileName}.png`)) continue
 
-            const oceanImageData = await generateOceanImage(ocean, islands)
-            saveOceanFile(worldCode, fileName, oceanImageData)
+            const oceanImage = await generateOceanImage(ocean, islands)
+            saveOceanFile(worldCode, fileName, oceanImage)
         }
     }))
 }
@@ -80,7 +80,7 @@ const calculateAbsoluteTownPositions = (towns: GrepolisTown[], islands: Island[]
         }
     }).filter(town => town !== undefined)
 
-const generateOceanImage = async (ocean: Ocean, islands: Island[]) => {
+const generateOceanImage = async (ocean: Ocean, islands: Island[]): Promise<Jimp> => {
     const oceanOffsetX = ocean.x * 100
     const oceanOffsetY = ocean.y * 100
     const islandBoundMinX = oceanOffsetX - OCEAN_OVERLAP
@@ -109,16 +109,8 @@ const generateOceanImage = async (ocean: Ocean, islands: Island[]) => {
         )
     }
 
-    return convertJimpToBuffer(oceanImage)
+    return oceanImage
 }
-
-const convertJimpToBuffer = (image: Jimp) =>
-    new Promise<Buffer>((resolve, reject) => {
-        image.getBuffer(Jimp.MIME_PNG, (error, buffer) => {
-            if (error) reject(error)
-            else resolve(buffer)
-        })
-    })
 
 const getOceanList = (): Ocean[] => {
     const oceanList: Ocean[] = []
