@@ -1,4 +1,4 @@
-import { act, randomNumber, randomString } from "./common"
+import { act } from "./common"
 
 test('Ocean data is generated and saved to blob', async () => {
 
