@@ -5,7 +5,7 @@ import Jimp from "jimp"
 const WORLD_DATA_CONTAINER_NAME = "world-data"
 
 export const saveWorldDataFile = async (worldCode: string, fileName: string, worldData: WorldData) => {
-    const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION)
+    const blobServiceClient = BlobServiceClient.fromConnectionString(process.env["AZURE_STORAGE_CONNECTION"])
     const containerClient = blobServiceClient.getContainerClient(WORLD_DATA_CONTAINER_NAME)
 
     const containerExists = await containerClient.exists()
@@ -36,7 +36,7 @@ export const saveOceanFile = async (worldCode: string, fileName: string, image: 
 }
 
 export const getOceanFileNames = async (worldCode: string): Promise<string[]> => {
-    const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION)
+    const blobServiceClient = BlobServiceClient.fromConnectionString(process.env["AZURE_STORAGE_CONNECTION"])
     const containerClient = blobServiceClient.getContainerClient(WORLD_DATA_CONTAINER_NAME)
 
     const containerExists = await containerClient.exists()
