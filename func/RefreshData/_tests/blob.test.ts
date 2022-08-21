@@ -14,4 +14,4 @@ test('World data files are generated for given worlds and saved to blob with cor
     expect(saveWorldDataFile.mock.calls[1][0]).toStrictEqual("en02")
     expect(saveWorldDataFile.mock.calls[1][1]).toStrictEqual("2022_07_05")
 
-}, 15000)
+})

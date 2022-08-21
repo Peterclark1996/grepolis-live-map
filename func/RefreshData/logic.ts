@@ -13,6 +13,7 @@ export const generateDataForWorlds = async (
     saveWorldDataFile: (worldCode: string, fileName: string, worldData: WorldData) => Promise<void>,
     saveOceanFile: (worldCode: string, fileName: string, image: Jimp) => Promise<void>,
     getOceanFileNames: (worldCode: string) => Promise<string[]>,
+    getImageFromFile: (imageFileName: string) => Promise<Jimp>,
     getCurrentDate: () => Date
 ): Promise<void> => {
     const worldCodes = await grepolisFunctions.fetchWorldCodeList()
@@ -44,7 +45,7 @@ export const generateDataForWorlds = async (
 
             if (existingOceanFiles.includes(`${worldCode}/ocean/${fileName}.png`)) continue
 
-            const oceanImage = await generateOceanImage(ocean, islands)
+            const oceanImage = await generateOceanImage(ocean, islands, getImageFromFile)
             saveOceanFile(worldCode, fileName, oceanImage)
         }
     }))
@@ -80,7 +81,11 @@ const calculateAbsoluteTownPositions = (towns: GrepolisTown[], islands: Island[]
         }
     }).filter(town => town !== undefined)
 
-const generateOceanImage = async (ocean: Ocean, islands: Island[]): Promise<Jimp> => {
+const generateOceanImage = async (
+    ocean: Ocean,
+    islands: Island[],
+    getImageFromFile: (imageFileName: String) => Promise<Jimp>
+): Promise<Jimp> => {
     const oceanOffsetX = ocean.x * 100
     const oceanOffsetY = ocean.y * 100
     const islandBoundMinX = oceanOffsetX - OCEAN_OVERLAP
@@ -96,10 +101,10 @@ const generateOceanImage = async (ocean: Ocean, islands: Island[]): Promise<Jimp
             i.y < islandBoundMaxY
         )
 
-    const oceanImage = await Jimp.read(IMAGE_PATH + "sea.png")
+    const oceanImage = await getImageFromFile("sea.png")
 
     for (const island of islandsInOcean) {
-        const islandImage = await getIslandImage(island.islandType)
+        const islandImage = await getIslandImage(island.islandType, getImageFromFile)
         if (!islandImage) continue
 
         oceanImage.composite(
@@ -124,7 +129,7 @@ const getOceanList = (): Ocean[] => {
 
 let cachedIslandImages: { [key: string]: Jimp } = {}
 
-const getIslandImage = async (islandId: number) => {
+const getIslandImage = async (islandId: number, getImageFromFile: (imageFileName: String) => Promise<Jimp>) => {
     const imageFileName = islandImagesNames[islandId]
     if (!imageFileName) return
 
@@ -132,7 +137,7 @@ const getIslandImage = async (islandId: number) => {
         return cachedIslandImages[imageFileName]
     }
 
-    const islandImage = await Jimp.read(IMAGE_PATH + imageFileName)
+    const islandImage = await getImageFromFile(imageFileName)
 
     cachedIslandImages[imageFileName] = islandImage
 

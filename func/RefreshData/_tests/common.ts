@@ -14,6 +14,7 @@ type actParams = {
     saveWorldDataFile?: (worldName: string) => Promise<void>,
     saveOceanFile?: (worldName: string, fileName: string, image: Jimp) => Promise<void>,
     getOceanFileNames?: (worldName: string) => Promise<string[]>,
+    getImageFromFile?: (imageFileName: string) => Promise<Jimp>,
     getCurrentDate?: () => Date
 }
 
@@ -29,6 +30,7 @@ export const act = (passedParams: actParams): Promise<void> =>
         passedParams.saveWorldDataFile || (() => Promise.resolve()),
         passedParams.saveOceanFile || (() => Promise.resolve()),
         passedParams.getOceanFileNames || (() => Promise.resolve([])),
+        passedParams.getImageFromFile || (() => Promise.resolve(new Jimp(1000, 1000))),
         passedParams.getCurrentDate || (() => new Date())
     )
 

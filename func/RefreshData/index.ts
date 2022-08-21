@@ -1,5 +1,7 @@
 import { AzureFunction, Context } from "@azure/functions"
+import Jimp from "jimp/"
 import { getOceanFileNames, saveOceanFile, saveWorldDataFile } from "./blob"
+import { IMAGE_PATH } from "./constants"
 import { fetchAlliances, fetchIslands, fetchPlayers, fetchTowns, fetchWorldCodeList } from "./grepolis"
 import { generateDataForWorlds } from "./logic"
 
@@ -14,11 +16,14 @@ const timerTrigger: AzureFunction = async (context: Context, myTimer: any): Prom
         fetchIslands
     }
 
+    const getImageFromFile = (imageFileName: string): Promise<Jimp> => Jimp.read(IMAGE_PATH + imageFileName)
+
     return generateDataForWorlds(
         grepolisFunctions,
         saveWorldDataFile,
         saveOceanFile,
         getOceanFileNames,
+        getImageFromFile,
         () => new Date()
     )
         .then(_ => context.log(`Function finished at ${new Date()}.`))
