@@ -20,7 +20,7 @@ export const saveWorldDataFile = async (worldCode: string, fileName: string, wor
 }
 
 export const saveOceanFile = async (worldCode: string, fileName: string, image: Jimp) => {
-    const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION)
+    const blobServiceClient = BlobServiceClient.fromConnectionString(process.env["AZURE_STORAGE_CONNECTION"])
     const containerClient = blobServiceClient.getContainerClient(WORLD_DATA_CONTAINER_NAME)
 
     const imageBuffer = await convertJimpToBuffer(image)
