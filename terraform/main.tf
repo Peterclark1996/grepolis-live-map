@@ -48,12 +48,8 @@ resource "azurerm_linux_function_app" "main" {
   storage_account_access_key = azurerm_storage_account.main.primary_access_key
 
   site_config {
-    application_stack = {
-      node_version: "14"
+    application_stack {
+      node_version = "14"
     }
-  }
-
-  app_settings = {
-    "FUNCTIONS_WORKER_RUNTIME" = "node"
   }
 }
