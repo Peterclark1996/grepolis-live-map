@@ -14,7 +14,7 @@ export const saveWorldDataFile = async (worldCode: string, fileName: string, wor
         await containerClient.create()
     }
 
-    const blockBlobClient = containerClient.getBlockBlobClient(`${worldCode}/${fileName}.json`)
+    const blockBlobClient = containerClient.getBlockBlobClient(`${worldCode}/data/${fileName}.json`)
     const dataToSave = JSON.stringify(worldData)
     await blockBlobClient.upload(dataToSave, dataToSave.length)
 }
