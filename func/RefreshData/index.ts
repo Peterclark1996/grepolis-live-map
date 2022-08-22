@@ -16,15 +16,19 @@ const timerTrigger: AzureFunction = async (context: Context, myTimer: any): Prom
         fetchIslands
     }
 
-    const getImageFromFile = (imageFileName: string): Promise<Jimp> => Jimp.read(IMAGE_PATH + imageFileName)
-
-    return generateDataForWorlds(
-        grepolisFunctions,
+    const blobFunctions = {
         saveWorldDataFile,
         saveOceanFile,
         saveWorldInfo,
         getWorldDataFileNames,
-        getOceanFileNames,
+        getOceanFileNames
+    }
+
+    const getImageFromFile = (imageFileName: string): Promise<Jimp> => Jimp.read(IMAGE_PATH + imageFileName)
+
+    return generateDataForWorlds(
+        grepolisFunctions,
+        blobFunctions,
         getImageFromFile,
         () => new Date()
     )

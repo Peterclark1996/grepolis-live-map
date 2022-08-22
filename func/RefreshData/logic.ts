@@ -3,19 +3,14 @@ import { BlobTown } from "./types/BlobTown"
 import { GrepolisFunctions } from "./types/GrepolisFunctions"
 import { GrepolisTown } from "./types/GrepolisTown"
 import { Island } from "./types/Island"
-import { WorldData } from "./types/WorldData"
 import "./number.extensions"
 import { Ocean } from "./types/Ocean"
 import Jimp from "jimp"
-import { WorldInfo } from "./types/WorldInfo"
+import { BlobFunctions } from "./types/BlobFunctions"
 
 export const generateDataForWorlds = async (
     grepolisFunctions: GrepolisFunctions,
-    saveWorldDataFile: (worldCode: string, fileName: string, worldData: WorldData) => Promise<void>,
-    saveOceanFile: (worldCode: string, fileName: string, image: Jimp) => Promise<void>,
-    saveWorldInfo: (worldCode: string, worldInfo: WorldInfo) => Promise<void>,
-    getWorldDataFileNames: (worldCode: string) => Promise<string[]>,
-    getOceanFileNames: (worldCode: string) => Promise<string[]>,
+    blobFunctions: BlobFunctions,
     getImageFromFile: (imageFileName: string) => Promise<Jimp>,
     getCurrentDate: () => Date
 ): Promise<void> => {
@@ -38,18 +33,18 @@ export const generateDataForWorlds = async (
         const currentDate = getCurrentDate()
         const fileName = `${currentDate.getUTCFullYear()}_${String(currentDate.getUTCMonth() + 1).padStart(2, '0')}_${String(currentDate.getUTCDate()).padStart(2, '0')}`
 
-        saveWorldDataFile(worldCode, fileName, worldData)
+        blobFunctions.saveWorldDataFile(worldCode, fileName, worldData)
 
 
-        const savedDates = await getWorldDataFileNames(worldCode)
+        const savedDates = await blobFunctions.getWorldDataFileNames(worldCode)
         const worldInfo = {
             avialableDates: savedDates.map(date => date.replace("en01/data/", "")).map(date => date.replace(".json", ""))
         }
-        saveWorldInfo(worldCode, worldInfo)
+        blobFunctions.saveWorldInfo(worldCode, worldInfo)
 
 
         const oceans = getOceanList()
-        const existingOceanFiles = await getOceanFileNames(worldCode)
+        const existingOceanFiles = await blobFunctions.getOceanFileNames(worldCode)
 
         for (const ocean of oceans) {
             const fileName = `${ocean.x}_${ocean.y}`
@@ -57,7 +52,7 @@ export const generateDataForWorlds = async (
             if (existingOceanFiles.includes(`${worldCode}/ocean/${fileName}.png`)) continue
 
             const oceanImage = await generateOceanImage(ocean, islands, getImageFromFile)
-            saveOceanFile(worldCode, fileName, oceanImage)
+            blobFunctions.saveOceanFile(worldCode, fileName, oceanImage)
         }
     }))
 }

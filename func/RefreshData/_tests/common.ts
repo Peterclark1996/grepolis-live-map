@@ -30,11 +30,13 @@ export const act = (passedParams: actParams): Promise<void> =>
             fetchTowns: passedParams.fetchTowns || (() => Promise.resolve([])),
             fetchIslands: passedParams.fetchIslands || (() => Promise.resolve([]))
         },
-        passedParams.saveWorldDataFile || (() => Promise.resolve()),
-        passedParams.saveOceanFile || (() => Promise.resolve()),
-        passedParams.saveWorldInfo || (() => Promise.resolve()),
-        passedParams.getWorldDataFileNames || (() => Promise.resolve([])),
-        passedParams.getOceanFileNames || (() => Promise.resolve([])),
+        {
+            saveWorldDataFile: passedParams.saveWorldDataFile || (() => Promise.resolve()),
+            saveOceanFile: passedParams.saveOceanFile || (() => Promise.resolve()),
+            saveWorldInfo: passedParams.saveWorldInfo || (() => Promise.resolve()),
+            getWorldDataFileNames: passedParams.getWorldDataFileNames || (() => Promise.resolve([])),
+            getOceanFileNames: passedParams.getOceanFileNames || (() => Promise.resolve([]))
+        },
         passedParams.getImageFromFile || (() => Promise.resolve(new Jimp(1000, 1000))),
         passedParams.getCurrentDate || (() => new Date())
     )
