@@ -1,6 +1,7 @@
 import { WorldData } from "./types/WorldData"
 import { BlobServiceClient } from '@azure/storage-blob'
 import Jimp from "jimp"
+import { WorldInfo } from "./types/WorldInfo"
 
 const WORLD_DATA_CONTAINER_NAME = "world-data"
 
@@ -45,6 +46,37 @@ export const getOceanFileNames = async (worldCode: string): Promise<string[]> =>
 
     const fileNames = []
     for await (const blob of containerClient.listBlobsFlat({ prefix: `${worldCode}/ocean/` })) {
+        fileNames.push(blob.name)
+    }
+
+    return fileNames
+}
+
+export const saveWorldInfo = async (worldCode: string, worldInfo: WorldInfo): Promise<void> => {
+    const blobServiceClient = BlobServiceClient.fromConnectionString(process.env["AZURE_STORAGE_CONNECTION"])
+    const containerClient = blobServiceClient.getContainerClient(WORLD_DATA_CONTAINER_NAME)
+
+    const containerExists = await containerClient.exists()
+
+    if (!containerExists) {
+        await containerClient.create()
+    }
+
+    const blockBlobClient = containerClient.getBlockBlobClient(`${worldCode}/info.json`)
+    const dataToSave = JSON.stringify(worldInfo)
+    await blockBlobClient.upload(dataToSave, dataToSave.length)
+}
+
+export const getWorldDataFileNames = async (worldCode: string): Promise<string[]> => {
+    const blobServiceClient = BlobServiceClient.fromConnectionString(process.env["AZURE_STORAGE_CONNECTION"])
+    const containerClient = blobServiceClient.getContainerClient(WORLD_DATA_CONTAINER_NAME)
+
+    const containerExists = await containerClient.exists()
+
+    if (!containerExists) return []
+
+    const fileNames = []
+    for await (const blob of containerClient.listBlobsFlat({ prefix: `${worldCode}/data/` })) {
         fileNames.push(blob.name)
     }
 

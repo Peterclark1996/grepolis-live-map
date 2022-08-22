@@ -7,11 +7,14 @@ import { WorldData } from "./types/WorldData"
 import "./number.extensions"
 import { Ocean } from "./types/Ocean"
 import Jimp from "jimp"
+import { WorldInfo } from "./types/WorldInfo"
 
 export const generateDataForWorlds = async (
     grepolisFunctions: GrepolisFunctions,
     saveWorldDataFile: (worldCode: string, fileName: string, worldData: WorldData) => Promise<void>,
     saveOceanFile: (worldCode: string, fileName: string, image: Jimp) => Promise<void>,
+    saveWorldInfo: (worldCode: string, worldInfo: WorldInfo) => Promise<void>,
+    getWorldDataFileNames: (worldCode: string) => Promise<string[]>,
     getOceanFileNames: (worldCode: string) => Promise<string[]>,
     getImageFromFile: (imageFileName: string) => Promise<Jimp>,
     getCurrentDate: () => Date
@@ -36,6 +39,14 @@ export const generateDataForWorlds = async (
         const fileName = `${currentDate.getUTCFullYear()}_${String(currentDate.getUTCMonth() + 1).padStart(2, '0')}_${String(currentDate.getUTCDate()).padStart(2, '0')}`
 
         saveWorldDataFile(worldCode, fileName, worldData)
+
+
+        const savedDates = await getWorldDataFileNames(worldCode)
+        const worldInfo = {
+            avialableDates: savedDates.map(date => date.replace("en01/data/", "")).map(date => date.replace(".json", ""))
+        }
+        saveWorldInfo(worldCode, worldInfo)
+
 
         const oceans = getOceanList()
         const existingOceanFiles = await getOceanFileNames(worldCode)

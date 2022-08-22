@@ -15,3 +15,18 @@ test('World data files are generated for given worlds and saved to blob with cor
     expect(saveWorldDataFile.mock.calls[1][1]).toStrictEqual("2022_07_05")
 
 })
+
+test('World info blob is generated with all data files', async () => {
+
+    const fetchWorldCodeList = () => Promise.resolve(["en01"])
+    const worldDataDates = ["2022_08_22", "2022_08_21", "2022_08_20", "2022_07_10"]
+    const getWorldDataFileNames = () => Promise.resolve(worldDataDates.map(date => `en01/data/${date}.json`))
+    const saveWorldInfo = jest.fn()
+
+    await act({ fetchWorldCodeList, getWorldDataFileNames, saveWorldInfo })
+
+    expect(saveWorldInfo.mock.calls.length).toBe(1)
+    expect(saveWorldInfo.mock.calls[0][0]).toStrictEqual("en01")
+    expect(saveWorldInfo.mock.calls[0][1].avialableDates).toEqual(worldDataDates)
+
+})

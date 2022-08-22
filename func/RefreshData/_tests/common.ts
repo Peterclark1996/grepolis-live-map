@@ -4,6 +4,7 @@ import { Island } from "../types/Island"
 import { Player } from "../types/Player"
 import { GrepolisTown } from "../types/GrepolisTown"
 import Jimp from "jimp"
+import { WorldInfo } from "../types/WorldInfo"
 
 type actParams = {
     fetchWorldCodeList?: () => Promise<string[]>,
@@ -13,6 +14,8 @@ type actParams = {
     fetchIslands?: (worldCode: string) => Promise<Island[]>,
     saveWorldDataFile?: (worldName: string) => Promise<void>,
     saveOceanFile?: (worldName: string, fileName: string, image: Jimp) => Promise<void>,
+    saveWorldInfo?: (worldCode: string, worldInfo: WorldInfo) => Promise<void>,
+    getWorldDataFileNames?: (worldCode: string) => Promise<string[]>,
     getOceanFileNames?: (worldName: string) => Promise<string[]>,
     getImageFromFile?: (imageFileName: string) => Promise<Jimp>,
     getCurrentDate?: () => Date
@@ -29,6 +32,8 @@ export const act = (passedParams: actParams): Promise<void> =>
         },
         passedParams.saveWorldDataFile || (() => Promise.resolve()),
         passedParams.saveOceanFile || (() => Promise.resolve()),
+        passedParams.saveWorldInfo || (() => Promise.resolve()),
+        passedParams.getWorldDataFileNames || (() => Promise.resolve([])),
         passedParams.getOceanFileNames || (() => Promise.resolve([])),
         passedParams.getImageFromFile || (() => Promise.resolve(new Jimp(1000, 1000))),
         passedParams.getCurrentDate || (() => new Date())
