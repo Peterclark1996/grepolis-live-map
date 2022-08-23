@@ -1,11 +1,11 @@
-import { act } from "./common"
+import { act, createWorldStatus } from "./common"
 
 test('Ocean data is generated and saved to blob', async () => {
 
-    const fetchWorldCodeList = () => Promise.resolve(["en01"])
+    const fetchWorldList = () => Promise.resolve([createWorldStatus("en01")])
     const saveOceanFile = jest.fn()
 
-    await act({ fetchWorldCodeList, saveOceanFile })
+    await act({ fetchWorldList, saveOceanFile })
 
     const oceanStrings: string[] = []
     for (let x = 0; x < 10; x++) {
@@ -21,12 +21,12 @@ test('Ocean data is generated and saved to blob', async () => {
 })
 
 test('Oceans that already have image files are not saved to blob', async () => {
-    const fetchWorldCodeList = () => Promise.resolve(["en01"])
+    const fetchWorldList = () => Promise.resolve([createWorldStatus("en01")])
     const saveOceanFile = jest.fn()
     const oceanNames = ["en01/ocean/0_0.png", "en01/ocean/3_7.png", "en01/ocean/6_9.png", "en01/ocean/9_9.png"]
     const getOceanFileNames = () => Promise.resolve(oceanNames)
 
-    await act({ fetchWorldCodeList, saveOceanFile, getOceanFileNames })
+    await act({ fetchWorldList, saveOceanFile, getOceanFileNames })
 
     const oceanStrings: string[] = []
     for (let x = 0; x < 10; x++) {

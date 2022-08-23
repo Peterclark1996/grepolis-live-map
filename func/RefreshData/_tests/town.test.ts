@@ -1,4 +1,4 @@
-import { act, randomNumber, randomString } from "./common"
+import { act, createWorldStatus, randomNumber, randomString } from "./common"
 
 test('Town data is fetched and saved to blob with calculated position values', async () => {
 
@@ -20,12 +20,12 @@ test('Town data is fetched and saved to blob with calculated position values', a
         resourcePlus: randomString(),
         resourceMinus: randomString()
     }
-    const fetchWorldCodeList = () => Promise.resolve(["en01"])
+    const fetchWorldList = () => Promise.resolve([createWorldStatus("en01")])
     const fetchTowns = () => Promise.resolve([inputTown])
     const fetchIslands = () => Promise.resolve([inputIsland])
     const saveWorldDataFile = jest.fn()
 
-    await act({ fetchWorldCodeList, fetchTowns, fetchIslands, saveWorldDataFile })
+    await act({ fetchWorldList, fetchTowns, fetchIslands, saveWorldDataFile })
 
     const expectedTown = {
         ...inputTown,
@@ -50,11 +50,11 @@ test('Towns with missing islands are not saved to blob', async () => {
         posOnIsland: randomNumber(),
         points: randomNumber()
     }
-    const fetchWorldCodeList = () => Promise.resolve(["en01"])
+    const fetchWorldList = () => Promise.resolve([createWorldStatus("en01")])
     const fetchTowns = () => Promise.resolve([inputTown])
     const saveWorldDataFile = jest.fn()
 
-    await act({ fetchWorldCodeList, fetchTowns, saveWorldDataFile })
+    await act({ fetchWorldList, fetchTowns, saveWorldDataFile })
 
     expect(saveWorldDataFile.mock.calls.length).toBe(1)
     expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")
@@ -82,12 +82,12 @@ test('Towns with invalid island positions are not saved to blob', async () => {
         resourcePlus: randomString(),
         resourceMinus: randomString()
     }
-    const fetchWorldCodeList = () => Promise.resolve(["en01"])
+    const fetchWorldList = () => Promise.resolve([createWorldStatus("en01")])
     const fetchTowns = () => Promise.resolve([inputTown])
     const fetchIslands = () => Promise.resolve([inputIsland])
     const saveWorldDataFile = jest.fn()
 
-    await act({ fetchWorldCodeList, fetchTowns, fetchIslands, saveWorldDataFile })
+    await act({ fetchWorldList, fetchTowns, fetchIslands, saveWorldDataFile })
 
     expect(saveWorldDataFile.mock.calls.length).toBe(1)
     expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")

@@ -2,9 +2,10 @@ import { Alliance } from "./Alliance"
 import { Island } from "./Island"
 import { Player } from "./Player"
 import { GrepolisTown } from "./GrepolisTown"
+import { WorldStatus } from "./WorldStatus"
 
 export type GrepolisFunctions = {
-    fetchWorldCodeList: () => Promise<string[]>,
+    fetchWorldList: () => Promise<WorldStatus[]>,
     fetchAlliances: (worldCode: string) => Promise<Alliance[]>,
     fetchPlayers: (worldCode: string) => Promise<Player[]>,
     fetchTowns: (worldCode: string) => Promise<GrepolisTown[]>,

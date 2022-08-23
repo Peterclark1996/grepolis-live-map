@@ -4,17 +4,25 @@ import { Island } from "../types/Island"
 import { Player } from "../types/Player"
 import { GrepolisTown } from "../types/GrepolisTown"
 import Jimp from "jimp"
-import { WorldInfo } from "../types/WorldInfo"
+import { WorldFullInfo } from "../types/WorldFullInfo"
+import { WorldStatus } from "../types/WorldStatus"
+
+export const createWorldStatus = (id: string): WorldStatus => ({
+    id,
+    name: "World Name",
+    endgame: "end_game_type_none",
+    isClosed: false
+})
 
 type actParams = {
-    fetchWorldCodeList?: () => Promise<string[]>,
+    fetchWorldList?: () => Promise<WorldStatus[]>,
     fetchAlliances?: (worldCode: string) => Promise<Alliance[]>,
     fetchPlayers?: (worldCode: string) => Promise<Player[]>,
     fetchTowns?: (worldCode: string) => Promise<GrepolisTown[]>,
     fetchIslands?: (worldCode: string) => Promise<Island[]>,
     saveWorldDataFile?: (worldName: string) => Promise<void>,
     saveOceanFile?: (worldName: string, fileName: string, image: Jimp) => Promise<void>,
-    saveWorldInfo?: (worldCode: string, worldInfo: WorldInfo) => Promise<void>,
+    saveWorldInfo?: (worldCode: string, WorldFullInfo: WorldFullInfo) => Promise<void>,
     getWorldDataFileNames?: (worldCode: string) => Promise<string[]>,
     getOceanFileNames?: (worldName: string) => Promise<string[]>,
     getImageFromFile?: (imageFileName: string) => Promise<Jimp>,
@@ -24,7 +32,7 @@ type actParams = {
 export const act = (passedParams: actParams): Promise<void> =>
     generateDataForWorlds(
         {
-            fetchWorldCodeList: passedParams.fetchWorldCodeList || (() => Promise.resolve([])),
+            fetchWorldList: passedParams.fetchWorldList || (() => Promise.resolve([])),
             fetchAlliances: passedParams.fetchAlliances || (() => Promise.resolve([])),
             fetchPlayers: passedParams.fetchPlayers || (() => Promise.resolve([])),
             fetchTowns: passedParams.fetchTowns || (() => Promise.resolve([])),

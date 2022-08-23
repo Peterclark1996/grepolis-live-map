@@ -1,4 +1,4 @@
-import { act, randomNumber, randomString } from "./common"
+import { act, createWorldStatus, randomNumber, randomString } from "./common"
 
 test('Player data is fetched and saved to blob', async () => {
 
@@ -10,11 +10,11 @@ test('Player data is fetched and saved to blob', async () => {
         rank: randomNumber(),
         towns: randomNumber()
     }
-    const fetchWorldCodeList = () => Promise.resolve(["en01"])
+    const fetchWorldList = () => Promise.resolve([createWorldStatus("en01")])
     const fetchPlayers = () => Promise.resolve([inputPlayer])
     const saveWorldDataFile = jest.fn()
 
-    await act({ fetchWorldCodeList, fetchPlayers, saveWorldDataFile })
+    await act({ fetchWorldList, fetchPlayers, saveWorldDataFile })
 
     expect(saveWorldDataFile.mock.calls.length).toBe(1)
     expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")
@@ -40,11 +40,11 @@ test('Players with no towns are not saved to blob', async () => {
         rank: randomNumber(),
         towns: 0
     }
-    const fetchWorldCodeList = () => Promise.resolve(["en01"])
+    const fetchWorldList = () => Promise.resolve([createWorldStatus("en01")])
     const fetchPlayers = () => Promise.resolve([validInputPlayer, invalidInputPlayer])
     const saveWorldDataFile = jest.fn()
 
-    await act({ fetchWorldCodeList, fetchPlayers, saveWorldDataFile })
+    await act({ fetchWorldList, fetchPlayers, saveWorldDataFile })
 
     expect(saveWorldDataFile.mock.calls.length).toBe(1)
     expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")

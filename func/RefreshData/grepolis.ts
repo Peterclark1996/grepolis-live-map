@@ -3,8 +3,19 @@ import { Island } from "./types/Island"
 import { Player } from "./types/Player"
 import { GrepolisTown } from "./types/GrepolisTown"
 import axios from "axios"
+import { WorldStatus } from "./types/WorldStatus"
 
-export const fetchWorldCodeList = () => Promise.resolve(["en137"])
+export const fetchWorldList = (): Promise<WorldStatus[]> =>
+    axios.get("https://en.grepolis.com/start/hall_of_fame").then(response => {
+        const worldsString = response.data.match(/(?<=var warriors_worlds = )[\W|\w]*}]/)[0]
+        const worldList = JSON.parse(worldsString)
+        return worldList.map(world => ({
+            id: world.id,
+            name: world.name,
+            endgame: world.endgame,
+            isClosed: world.closed
+        }))
+    })
 
 export const fetchAlliances = (worldCode: string): Promise<Alliance[]> =>
     axios.get(`https://${worldCode}.grepolis.com/data/alliances.txt`)

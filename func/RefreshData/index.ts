@@ -2,14 +2,14 @@ import { AzureFunction, Context } from "@azure/functions"
 import Jimp from "jimp/"
 import { getOceanFileNames, getWorldDataFileNames, saveOceanFile, saveWorldDataFile, saveWorldInfo } from "./blob"
 import { IMAGE_PATH } from "./constants"
-import { fetchAlliances, fetchIslands, fetchPlayers, fetchTowns, fetchWorldCodeList } from "./grepolis"
+import { fetchAlliances, fetchIslands, fetchPlayers, fetchTowns, fetchWorldList } from "./grepolis"
 import { generateDataForWorlds } from "./logic"
 
 const timerTrigger: AzureFunction = async (context: Context, myTimer: any): Promise<void> => {
     context.log(`Function triggered at ${new Date()}.`)
 
     const grepolisFunctions = {
-        fetchWorldCodeList,
+        fetchWorldList,
         fetchAlliances,
         fetchPlayers,
         fetchTowns,

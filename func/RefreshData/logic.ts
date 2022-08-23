@@ -14,46 +14,47 @@ export const generateDataForWorlds = async (
     getImageFromFile: (imageFileName: string) => Promise<Jimp>,
     getCurrentDate: () => Date
 ): Promise<void> => {
-    const worldCodes = await grepolisFunctions.fetchWorldCodeList()
+    const worldList = await grepolisFunctions.fetchWorldList()
 
-    await Promise.all(worldCodes.map(async worldCode => {
-        const alliances = await grepolisFunctions.fetchAlliances(worldCode)
-        const players = await grepolisFunctions.fetchPlayers(worldCode)
-        const towns = await grepolisFunctions.fetchTowns(worldCode)
-        const islands = await grepolisFunctions.fetchIslands(worldCode)
+    await Promise.all(worldList.map(async worldStatus => {
+        if (!worldStatus.isClosed) {
+            const alliances = await grepolisFunctions.fetchAlliances(worldStatus.id)
+            const players = await grepolisFunctions.fetchPlayers(worldStatus.id)
+            const towns = await grepolisFunctions.fetchTowns(worldStatus.id)
+            const islands = await grepolisFunctions.fetchIslands(worldStatus.id)
 
-        const positionedTowns = calculateAbsoluteTownPositions(towns, islands)
+            const positionedTowns = calculateAbsoluteTownPositions(towns, islands)
 
-        const worldData = {
-            alliances: alliances.filter(alliance => alliance.towns > 0),
-            players: players.filter(player => player.towns > 0),
-            towns: positionedTowns
+            const worldData = {
+                alliances: alliances.filter(alliance => alliance.towns > 0),
+                players: players.filter(player => player.towns > 0),
+                towns: positionedTowns
+            }
+
+            const currentDate = getCurrentDate()
+            const fileName = `${currentDate.getUTCFullYear()}_${String(currentDate.getUTCMonth() + 1).padStart(2, '0')}_${String(currentDate.getUTCDate()).padStart(2, '0')}`
+
+            blobFunctions.saveWorldDataFile(worldStatus.id, fileName, worldData)
+
+            const oceans = getOceanList()
+            const existingOceanFiles = await blobFunctions.getOceanFileNames(worldStatus.id)
+
+            for (const ocean of oceans) {
+                const fileName = `${ocean.x}_${ocean.y}`
+
+                if (existingOceanFiles.includes(`${worldStatus.id}/ocean/${fileName}.png`)) continue
+
+                const oceanImage = await generateOceanImage(ocean, islands, getImageFromFile)
+                blobFunctions.saveOceanFile(worldStatus.id, fileName, oceanImage)
+            }
         }
 
-        const currentDate = getCurrentDate()
-        const fileName = `${currentDate.getUTCFullYear()}_${String(currentDate.getUTCMonth() + 1).padStart(2, '0')}_${String(currentDate.getUTCDate()).padStart(2, '0')}`
-
-        blobFunctions.saveWorldDataFile(worldCode, fileName, worldData)
-
-
-        const savedDates = await blobFunctions.getWorldDataFileNames(worldCode)
-        const worldInfo = {
+        const savedDates = await blobFunctions.getWorldDataFileNames(worldStatus.id)
+        const WorldFullInfo = {
+            ...worldStatus,
             avialableDates: savedDates.map(date => date.match(/(\w+)(.json)$/)[0]).map(file => file.replace(".json", ""))
         }
-        blobFunctions.saveWorldInfo(worldCode, worldInfo)
-
-
-        const oceans = getOceanList()
-        const existingOceanFiles = await blobFunctions.getOceanFileNames(worldCode)
-
-        for (const ocean of oceans) {
-            const fileName = `${ocean.x}_${ocean.y}`
-
-            if (existingOceanFiles.includes(`${worldCode}/ocean/${fileName}.png`)) continue
-
-            const oceanImage = await generateOceanImage(ocean, islands, getImageFromFile)
-            blobFunctions.saveOceanFile(worldCode, fileName, oceanImage)
-        }
+        blobFunctions.saveWorldInfo(worldStatus.id, WorldFullInfo)
     }))
 }
 
