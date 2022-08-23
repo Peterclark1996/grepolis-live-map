@@ -38,7 +38,7 @@ export const generateDataForWorlds = async (
 
         const savedDates = await blobFunctions.getWorldDataFileNames(worldCode)
         const worldInfo = {
-            avialableDates: savedDates.map(date => date.replace("en01/data/", "")).map(date => date.replace(".json", ""))
+            avialableDates: savedDates.map(date => date.match(/(\w+)(.json)$/)[0]).map(file => file.replace(".json", ""))
         }
         blobFunctions.saveWorldInfo(worldCode, worldInfo)
 
