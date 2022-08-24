@@ -15,6 +15,7 @@ export const generateDataForWorlds = async (
     getCurrentDate: () => Date
 ): Promise<void> => {
     const worldList = await grepolisFunctions.fetchWorldList()
+    await blobFunctions.saveWorldList(worldList)
 
     await Promise.all(worldList.map(async worldStatus => {
         if (!worldStatus.isClosed) {

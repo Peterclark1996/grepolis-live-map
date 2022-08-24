@@ -2,6 +2,7 @@ import { WorldData } from "./types/WorldData"
 import { BlobServiceClient, ContainerClient } from '@azure/storage-blob'
 import Jimp from "jimp"
 import { WorldFullInfo } from "./types/WorldFullInfo"
+import { WorldStatus } from "./types/WorldStatus"
 
 const WORLD_DATA_CONTAINER_NAME = "world-data"
 
@@ -37,6 +38,14 @@ export const saveWorldInfo = async (worldCode: string, WorldFullInfo: WorldFullI
 
     const blockBlobClient = containerClient.getBlockBlobClient(`${worldCode}/info.json`)
     const dataToSave = JSON.stringify(WorldFullInfo)
+    await blockBlobClient.upload(dataToSave, dataToSave.length)
+}
+
+export const saveWorldList = async (worldList: WorldStatus[]): Promise<void> => {
+    const containerClient = await getBlobClientConnection()
+
+    const blockBlobClient = containerClient.getBlockBlobClient(`worlds.json`)
+    const dataToSave = JSON.stringify(worldList)
     await blockBlobClient.upload(dataToSave, dataToSave.length)
 }
 

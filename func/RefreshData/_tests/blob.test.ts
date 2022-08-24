@@ -65,3 +65,34 @@ test('Closed worlds do not have data saved to a blob', async () => {
     expect(saveWorldDataFile.mock.calls.length).toBe(0)
 
 })
+
+test('World list is saved to blob', async () => {
+
+    const fetchWorldList = () => Promise.resolve([{
+        ...createWorldStatus("en01"),
+        name: "First World",
+        isClosed: true
+    }, {
+        ...createWorldStatus("en02"),
+        name: "Second world",
+        endgame: "end_game_type_domination"
+    }])
+    const saveWorldList = jest.fn()
+
+    await act({ fetchWorldList, saveWorldList })
+
+    const expectedWorldList = [{
+        id: "en01",
+        name: "First World",
+        endgame: "end_game_type_none",
+        isClosed: true
+    }, {
+        id: "en02",
+        name: "Second world",
+        endgame: "end_game_type_domination",
+        isClosed: false
+    }]
+    expect(saveWorldList.mock.calls.length).toBe(1)
+    expect(saveWorldList.mock.calls[0][0]).toStrictEqual(expectedWorldList)
+
+})

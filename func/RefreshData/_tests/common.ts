@@ -23,6 +23,7 @@ type actParams = {
     saveWorldDataFile?: (worldName: string) => Promise<void>,
     saveOceanFile?: (worldName: string, fileName: string, image: Jimp) => Promise<void>,
     saveWorldInfo?: (worldCode: string, WorldFullInfo: WorldFullInfo) => Promise<void>,
+    saveWorldList?: (worldList: WorldStatus[]) => Promise<void>
     getWorldDataFileNames?: (worldCode: string) => Promise<string[]>,
     getOceanFileNames?: (worldName: string) => Promise<string[]>,
     getImageFromFile?: (imageFileName: string) => Promise<Jimp>,
@@ -42,6 +43,7 @@ export const act = (passedParams: actParams): Promise<void> =>
             saveWorldDataFile: passedParams.saveWorldDataFile || (() => Promise.resolve()),
             saveOceanFile: passedParams.saveOceanFile || (() => Promise.resolve()),
             saveWorldInfo: passedParams.saveWorldInfo || (() => Promise.resolve()),
+            saveWorldList: passedParams.saveWorldList || (() => Promise.resolve()),
             getWorldDataFileNames: passedParams.getWorldDataFileNames || (() => Promise.resolve([])),
             getOceanFileNames: passedParams.getOceanFileNames || (() => Promise.resolve([]))
         },
