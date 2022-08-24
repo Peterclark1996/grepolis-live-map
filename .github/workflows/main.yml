@@ -65,11 +65,17 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         enable-AzPSSession: true 
 
-    - name: Add blob container connection
+    - name: Configure azure resources
       uses: azure/powershell@v1
       with:
         inlineScript: |
           az functionapp config appsettings set --name "${{ env.SERVICE_NAME }}-azfunc" --resource-group "${{ env.SERVICE_NAME }}-rg" --settings "AZURE_STORAGE_CONNECTION=${{ secrets.AZURE_STORAGE_CONNECTION }}"
+          
+          $containerExistsResponse = az storage container exists --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}" --name "world-data"
+          $containerExists = ($containerExistsResponse | ConvertFrom-Json).exists
+          if(!$containerExists){
+              az storage container create --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}" --name "world-data" --public-access blob
+          }
         azPSVersion: "latest"
 
     - name: Fetch Publishing Profile
