@@ -1,0 +1,1 @@
+export const BASE_CONTENT_URL = "https://savingwhale.blob.core.windows.net/world-data"
