@@ -7,5 +7,6 @@
       "schedule": "0 15 * * * *"
     }
   ],
-  "scriptFile": "../dist/RefreshData/index.js"
+  "scriptFile": "../dist/RefreshData/index.js",
+  "functionTimeout": "00:10:00"
 }
