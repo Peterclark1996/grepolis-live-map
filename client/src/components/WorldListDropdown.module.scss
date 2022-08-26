@@ -5,9 +5,9 @@
     user-select: none;
     -webkit-user-select: none;
 
-    -webkit-transition: -webkit-border-radius .2s .2s;
-    -ms-transition: -ms-border-radius .2s .2s;
-    transition: border-radius .2s .2s;
+    -webkit-transition: -webkit-border-radius .05s .2s;
+    -ms-transition: -ms-border-radius .05s .2s;
+    transition: border-radius .05s .2s;
     border-radius: 20px;
 
     &.open {
