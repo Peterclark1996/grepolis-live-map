@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { BASE_CONTENT_URL } from "../constants"
-import useApi from "../hooks/useApi"
-import useSelection from "../hooks/useSelection"
+import { useSelection } from "../hooks/useSelection"
 import { World } from "../types/World"
 import classes from "./WorldListDropdown.module.scss"
 import WorldListDropdownOption from "./WorldListDropdownOption"
@@ -10,11 +8,10 @@ const WorldListDropdown = () => {
     const [showingOptions, setShowingOptions] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
 
-    const { data: worlds, errored, loading } = useApi<World[]>(`${BASE_CONTENT_URL}/worlds.json`)
-    const { clearSelection, selectedWorldId, setSelectedWorldId } = useSelection()
+    const { worlds, errored, loading, selectedWorld, setSelectedWorld } = useSelection()
 
     const onSelectWorld = (world: World) => {
-        setSelectedWorldId(world.id)
+        setSelectedWorld(world)
         setShowingOptions(false)
     }
 
@@ -28,17 +25,6 @@ const WorldListDropdown = () => {
         document.addEventListener("click", handleClickOutsideComponent)
         return () => document.removeEventListener("click", handleClickOutsideComponent)
     }, [handleClickOutsideComponent])
-
-    const selectedWorld = worlds?.find(world => world.id === selectedWorldId)
-
-    useEffect(() => {
-        if (errored || loading || worlds == undefined || selectedWorldId === "") return
-
-        if (selectedWorld != undefined) return
-
-        clearSelection()
-
-    }, [clearSelection, errored, loading, selectedWorld, selectedWorldId, worlds])
 
     if (errored) return <div>Failed to fetch worlds</div>
 
