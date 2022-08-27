@@ -1,4 +1,5 @@
 import ErrorBox from "./components/ErrorBox"
+import LoadingSpinner from "./components/LoadingSpinner"
 import DefaultPage from "./DefaultPage"
 import { useSelection } from "./hooks/useSelection"
 import LoadedWorldPage from "./LoadedWorldPage"
@@ -7,18 +8,27 @@ const App = () => {
 
     const { worlds, errored, loading, selectedWorld } = useSelection()
 
-    if (errored) return (
-        <div className="m-4">
-            <ErrorBox message={"Failed to fetch worlds"} />
-        </div>
-    )
+    const render = () => {
+        if (errored) return (
+            <div className="m-4">
+                <ErrorBox message={"Failed to fetch worlds"} />
+            </div>
+        )
 
-    if (loading || worlds == undefined) return <div>Loading</div>
+        if (loading || worlds == undefined) return (
+            <div className="d-flex h-100 align-items-center">
+                <LoadingSpinner />
+            </div>
+        )
+
+        return selectedWorld == undefined ? <DefaultPage /> : <LoadedWorldPage />
+    }
+
 
     return (
-        <div className="app">
+        <div className="app bg-secondary">
             {
-                selectedWorld == undefined ? <DefaultPage /> : <LoadedWorldPage />
+                render()
             }
         </div>
     )
