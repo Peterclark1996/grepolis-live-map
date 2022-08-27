@@ -1,17 +1,25 @@
-import WorldListDropdown from "./components/WorldListDropdown"
+import ErrorBox from "./components/ErrorBox"
+import DefaultPage from "./DefaultPage"
+import { useSelection } from "./hooks/useSelection"
+import LoadedWorldPage from "./LoadedWorldPage"
 
 const App = () => {
+
+    const { worlds, errored, loading, selectedWorld } = useSelection()
+
+    if (errored) return (
+        <div className="m-4">
+            <ErrorBox message={"Failed to fetch worlds"} />
+        </div>
+    )
+
+    if (loading || worlds == undefined) return <div>Loading</div>
+
     return (
         <div className="app">
-            <div className="d-flex flex-column w-25 bg-secondary p-4">
-                <WorldListDropdown />
-                <div className="mt-4">
-                    Alliances
-                </div>
-            </div>
-            <div className="d-flex w-75">
-                Map
-            </div>
+            {
+                selectedWorld == undefined ? <DefaultPage /> : <LoadedWorldPage />
+            }
         </div>
     )
 }

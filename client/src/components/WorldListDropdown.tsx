@@ -8,7 +8,7 @@ const WorldListDropdown = () => {
     const [showingOptions, setShowingOptions] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
 
-    const { worlds, errored, loading, selectedWorld, setSelectedWorld } = useSelection()
+    const { worlds, selectedWorld, setSelectedWorld } = useSelection()
 
     const onSelectWorld = (world: World) => {
         setSelectedWorld(world)
@@ -25,10 +25,6 @@ const WorldListDropdown = () => {
         document.addEventListener("click", handleClickOutsideComponent)
         return () => document.removeEventListener("click", handleClickOutsideComponent)
     }, [handleClickOutsideComponent])
-
-    if (errored) return <div>Failed to fetch worlds</div>
-
-    if (loading || worlds == undefined) return <div>Loading</div>
 
     return (
         <div ref={ref} className="d-flex flex-column position-relative">
