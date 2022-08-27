@@ -33,7 +33,7 @@ const WorldListDropdown = () => {
     return (
         <div ref={ref} className="d-flex flex-column position-relative">
             <div
-                className={`d-flex justify-content-between align-items-center px-4 py-2 ${classes.dropdown} ${showingOptions && classes.open}`}
+                className={`d-flex justify-content-between align-items-center mx-4 px-4 py-2 ${classes.dropdown} ${showingOptions && classes.open}`}
                 role="button"
                 onClick={() => setShowingOptions(!showingOptions)}
             >
@@ -48,14 +48,16 @@ const WorldListDropdown = () => {
                 </div>
             </div>
             <div>
-                <div className={`d-flex flex-column position-absolute overflow-auto w-100 ${classes.options} ${showingOptions && classes.open}`}>
-                    {
-                        worlds.filter(world => !world.isClosed).map(world => <WorldListDropdownOption key={world.id} world={world} onClick={() => onSelectWorld(world)} />)
-                    }
-                    <div className="d-flex flex-grow-1 border mx-3 "></div>
-                    {
-                        worlds.filter(world => world.isClosed).map(world => <WorldListDropdownOption key={world.id} world={world} onClick={() => onSelectWorld(world)} />)
-                    }
+                <div className="position-absolute overflow-hidden w-100 px-4 pb-4">
+                    <div className={`d-flex flex-column overflow-auto w-100 ${classes.options} ${showingOptions && classes.open}`}>
+                        {
+                            worlds.filter(world => !world.isClosed).map(world => <WorldListDropdownOption key={world.id} world={world} onClick={() => onSelectWorld(world)} />)
+                        }
+                        <div className="d-flex flex-grow-1 border mx-3 "></div>
+                        {
+                            worlds.filter(world => world.isClosed).map(world => <WorldListDropdownOption key={world.id} world={world} onClick={() => onSelectWorld(world)} />)
+                        }
+                    </div>
                 </div>
             </div>
         </div>
