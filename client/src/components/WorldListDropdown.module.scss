@@ -1,6 +1,6 @@
 .dropdown {
     background-color: white;
-    box-shadow: rgba(60, 64, 67, 0.5) 0 1px 3px 0, rgba(60, 64, 67, 0.5) 0 8px 15px 3px;
+    box-shadow: rgba(60, 64, 67, 1) 0 1px 3px 0, rgba(60, 64, 67, 0.5) 0 8px 15px 3px;
     color: #3c4043;
     user-select: none;
     -webkit-user-select: none;
@@ -22,6 +22,12 @@
     }
 }
 
+.optionsContainer {
+    min-width: calc(100% + 40px);
+    left: -20px;
+    padding: 0px 20px 20px 20px;
+}
+
 .options {
     background-color: white;
     border-radius: 0px 0px 20px 20px;
@@ -36,7 +42,7 @@
     transition: max-height .2s;
 
     &.open {
-        box-shadow: rgba(60, 64, 67, 0.5) 0 1px 3px 0, rgba(60, 64, 67, 0.5) 0 8px 15px 3px;
+        box-shadow: rgba(60, 64, 67, 1) 0 1px 3px 0, rgba(60, 64, 67, 0.5) 0 8px 15px 3px;
         max-height: 400px;
     }
 }

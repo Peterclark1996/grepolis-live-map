@@ -9,17 +9,8 @@ const App = () => {
     const { worlds, errored, loading, selectedWorld } = useSelection()
 
     const render = () => {
-        if (errored) return (
-            <div className="m-4">
-                <ErrorBox message={"Failed to fetch worlds"} />
-            </div>
-        )
-
-        if (loading || worlds == undefined) return (
-            <div className="d-flex h-100 align-items-center">
-                <LoadingSpinner />
-            </div>
-        )
+        if (errored) return <ErrorBox message="Failed to fetch worlds" />
+        if (loading || worlds == undefined) return <LoadingSpinner />
 
         return selectedWorld == undefined ? <DefaultPage /> : <LoadedWorldPage />
     }

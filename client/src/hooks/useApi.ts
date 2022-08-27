@@ -1,20 +1,25 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 
-const useApi = <T>(url: string) => {
+const useApi = <T>(
+    url: string,
+    transform: (data: any) => T = data => data as T
+) => {
+    const [lastFetchedUrl, setLastFetchedUrl] = useState<string>()
     const [data, setData] = useState<T>()
     const [errored, setErrored] = useState(false)
     const [loading, setLoading] = useState(false)
     const [loaded, setLoaded] = useState(false)
 
     useEffect(() => {
-        if (errored || loading || loaded) return
+        if (lastFetchedUrl === url && (errored || loading || loaded)) return
 
         setLoading(true)
+        setLastFetchedUrl(url)
 
         axios.get(url)
             .then(res => {
-                setData(res.data)
+                setData(transform(res.data))
                 setLoaded(true)
                 setLoading(false)
             })
@@ -23,7 +28,7 @@ const useApi = <T>(url: string) => {
                 setLoaded(true)
                 setLoading(false)
             })
-    }, [errored, loaded, loading, url])
+    }, [errored, lastFetchedUrl, loaded, loading, transform, url])
 
     return { data, errored, loading, loaded }
 }
