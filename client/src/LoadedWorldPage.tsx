@@ -1,5 +1,6 @@
 import AllianceList from "./components/AllianceList"
 import ErrorBox from "./components/ErrorBox"
+import LeafletMap from "./components/Leaflet/LeafletMap"
 import LoadingSpinner from "./components/LoadingSpinner"
 import WorldListDropdown from "./components/WorldListDropdown"
 import { BASE_CONTENT_URL } from "./constants"
@@ -30,9 +31,7 @@ const LoadedWorldPage = () => {
                 <div className="my-1" />
                 <AllianceList alliances={worldData.alliances} />
             </div>
-            <div className="d-flex w-75 bg-primary">
-                Map
-            </div>
+            <LeafletMap />
         </div>
     )
 }

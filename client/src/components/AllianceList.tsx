@@ -10,7 +10,7 @@ const AllianceList = ({ alliances }: { alliances: Alliance[] }) => {
         .sort((a, b) => a.points < b.points ? 1 : -1)
         .slice(0, 14)
 
-    const [selectedAllianceIds, setSelectedAllianceIds] = useState<number[]>(topAlliances.slice(0, 10).map(a => a.id))
+    const [selectedAllianceIds, setSelectedAllianceIds] = useState<number[]>(topAlliances.slice(0, 14).map(a => a.id))
 
     const isAllianceSelected = (alliance: Alliance) => selectedAllianceIds.includes(alliance.id)
 

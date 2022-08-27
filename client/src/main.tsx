@@ -4,6 +4,7 @@ import App from './App'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import "@fortawesome/fontawesome-free/css/all.min.css"
+import 'leaflet/dist/leaflet.css'
 import { BrowserRouter } from 'react-router-dom'
 import { SelectionProvider } from './hooks/useSelection'
 

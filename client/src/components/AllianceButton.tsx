@@ -18,7 +18,7 @@ const AllianceButton = ({ alliance, position, colour, selected, onClick }: {
             role="button"
         >
             <div className={`d-flex flex-grow-1 overflow-hidden ${classes.background}`} style={{ "backgroundColor": `${colour}40` }}>
-                <div className={`d-flex align-items-center me-2 ${classes.colour}`} style={{ "backgroundColor": colour }}>
+                <div className={`d-flex align-items-center me-2 px-1 ${classes.colour}`} style={{ "backgroundColor": colour }}>
                     <input
                         className="form-check-input bg-transparent shadow-none border-0 mx-2 mb-1"
                         type="checkbox"
