@@ -1,8 +1,8 @@
 import { Alliance } from "../types/Alliance"
 import classes from "./AllianceButton.module.scss"
-import allianceIcon from "../icons/icon_alliance.png"
-import pointsIcon from "../icons/icon_points.png"
-import playerIcon from "../icons/icon_player.png"
+import allianceIcon from "../img/icon_alliance.png"
+import pointsIcon from "../img/icon_points.png"
+import playerIcon from "../img/icon_player.png"
 
 const AllianceButton = ({ alliance, position, colour, selected, onClick }: {
     alliance: Alliance,
@@ -17,7 +17,7 @@ const AllianceButton = ({ alliance, position, colour, selected, onClick }: {
             onClick={onClick}
             role="button"
         >
-            <div className={`d-flex flex-grow-1 overflow-hidden ${classes.background}`} style={{ "backgroundColor": `${colour}40` }}>
+            <div className={`d-flex flex-grow-1 ${classes.background}`} style={{ "backgroundColor": `${colour}40` }}>
                 <div className={`d-flex align-items-center me-2 px-1 ${classes.colour}`} style={{ "backgroundColor": colour }}>
                     <input
                         className="form-check-input bg-transparent shadow-none border-0 mx-2 mb-1"

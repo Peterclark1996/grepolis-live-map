@@ -1,6 +1,6 @@
 import { LayerGroup, Polyline } from "react-leaflet"
 
-const Grid = () => {
+const GridLayer = () => {
     return (
         <LayerGroup>
             {
@@ -25,4 +25,4 @@ const Grid = () => {
     )
 }
 
-export default Grid
+export default GridLayer

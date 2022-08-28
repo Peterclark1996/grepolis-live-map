@@ -1,11 +1,10 @@
 import { LayerGroup, ImageOverlay } from "react-leaflet"
 import { BASE_CONTENT_URL } from "../../constants"
 import { useSelection } from "../../hooks/useSelection"
+import sea from "../../img/sea.png"
 
-const Oceans = () => {
+const OceansLayer = () => {
     const { selectedWorld } = useSelection()
-
-    if (!selectedWorld) return <></>
 
     return (
         <LayerGroup>
@@ -14,7 +13,8 @@ const Oceans = () => {
                     [...Array(10)].map((_, yIndex) =>
                         <ImageOverlay
                             key={`${xIndex}-${yIndex}`}
-                            url={`${BASE_CONTENT_URL}/${selectedWorld.id}/ocean/${xIndex}_${yIndex}.png`}
+                            url={`${BASE_CONTENT_URL}/${selectedWorld?.id}/ocean/${xIndex}_${yIndex}.png`}
+                            errorOverlayUrl={sea}
                             bounds={[
                                 [
                                     (9 - yIndex) * 100,
@@ -32,4 +32,4 @@ const Oceans = () => {
     )
 }
 
-export default Oceans
+export default OceansLayer

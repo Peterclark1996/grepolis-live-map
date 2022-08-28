@@ -1,5 +1,7 @@
 export const BASE_CONTENT_URL = "https://savingwhale.blob.core.windows.net/world-data"
 
+export const DEFAULT_ALLIANCE_COLOUR = "#676767"
+
 export const ALLIANCE_COLOURS = [
     "#FF0000",
     "#8B5A00",
