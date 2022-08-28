@@ -13,7 +13,7 @@ const LeafletMap = () => {
             bounds={[[1000, 0], [0, 1000]]}
             crs={L.CRS.Simple}
             minZoom={0}
-            maxZoom={10}
+            maxZoom={5}
         >
             <Grid />
             <Oceans />

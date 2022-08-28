@@ -17,8 +17,11 @@ const LoadedWorldPage = () => {
         data => data.avialableDates
     )
 
+    const currentDate = new Date()
+    currentDate.setHours(currentDate.getHours() - 1)
+
     const { data: worldData, errored: worldDataErrored, loading: worldDataLoading } = useApi<WorldData>(
-        `${BASE_CONTENT_URL}/${selectedWorld?.id}/data/${(new Date()).toISOString().split('T')[0].replaceAll("-", "_")}.json`
+        `${BASE_CONTENT_URL}/${selectedWorld?.id}/data/${currentDate.toISOString().split('T')[0].replaceAll("-", "_")}.json`
     )
 
     if (worldDatesErrored || worldDataErrored) return <ErrorBox message="Failed to fetch world data" />
