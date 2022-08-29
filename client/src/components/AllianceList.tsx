@@ -21,9 +21,9 @@ const AllianceList = ({ alliances, allianceColours }: { alliances: Alliance[], a
 
     return (
         <div className="d-flex flex-column flex-grow-1 overflow-auto">
-            <div className={`d-flex justify-content-center ${classes.title}`}>
+            <span className={`d-flex justify-content-center ${classes.title}`}>
                 Alliances
-            </div>
+            </span>
             <div className={`d-flex flex-grow-1 flex-column mt-2 px-4 overflow-auto`}>
                 {
                     alliances.map((alliance, index) =>

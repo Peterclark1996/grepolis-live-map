@@ -2,9 +2,29 @@ import { LayerGroup, ImageOverlay } from "react-leaflet"
 import { BASE_CONTENT_URL } from "../../constants"
 import { useSelection } from "../../hooks/useSelection"
 import sea from "../../img/sea.png"
+import { OceanRenderOption } from "../../types/enums/OceanRenderOption"
 
-const OceansLayer = () => {
+const OceansLayer = ({ renderOption }: { renderOption: string }) => {
     const { selectedWorld } = useSelection()
+
+    const getOceanUrl = (xIndex: number, yIndex: number): string => {
+        switch (renderOption) {
+            case OceanRenderOption.None:
+                return sea
+            case OceanRenderOption.Center:
+                if (xIndex !== 4 && xIndex !== 5) return sea
+                if (yIndex !== 4 && yIndex !== 5) return sea
+                return `${BASE_CONTENT_URL}/${selectedWorld?.id}/ocean/${xIndex}_${yIndex}.png`
+            case OceanRenderOption.Outer:
+                if (xIndex < 3 || xIndex > 6) return sea
+                if (yIndex < 3 || yIndex > 6) return sea
+                return `${BASE_CONTENT_URL}/${selectedWorld?.id}/ocean/${xIndex}_${yIndex}.png`
+            case OceanRenderOption.All:
+                return `${BASE_CONTENT_URL}/${selectedWorld?.id}/ocean/${xIndex}_${yIndex}.png`
+            default:
+                return sea
+        }
+    }
 
     return (
         <LayerGroup>
@@ -13,7 +33,7 @@ const OceansLayer = () => {
                     [...Array(10)].map((_, yIndex) =>
                         <ImageOverlay
                             key={`${xIndex}-${yIndex}`}
-                            url={`${BASE_CONTENT_URL}/${selectedWorld?.id}/ocean/${xIndex}_${yIndex}.png`}
+                            url={getOceanUrl(xIndex, yIndex)}
                             errorOverlayUrl={sea}
                             bounds={[
                                 [

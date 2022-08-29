@@ -2,15 +2,25 @@ import { MapContainer } from "react-leaflet"
 import GridLayer from "./GridLayer"
 import OceansLayer from "./OceansLayer"
 import L from "leaflet"
-import { useSelection } from "../../hooks/useSelection"
 import { WorldData } from "../../types/WorldData"
 import Alliance from "./LeafletAlliance"
 import { AllianceColour } from "../../types/AllianceColour"
+import { useMemo } from "react"
 
-const LeafletMap = ({ worldData, allianceColours }: { worldData: WorldData, allianceColours: AllianceColour[] }) => {
-    const { selectedWorld } = useSelection()
-
-    if (!selectedWorld) return <></>
+const LeafletMap = ({ worldData, allianceColours, oceanRenderOption }: {
+    worldData: WorldData,
+    allianceColours: AllianceColour[],
+    oceanRenderOption: string
+}) => {
+    const towns = useMemo(() => worldData.alliances.map(alliance =>
+        <Alliance
+            key={alliance.id}
+            alliance={alliance}
+            players={worldData.players}
+            towns={worldData.towns}
+            allianceColours={allianceColours}
+        />
+    ), [allianceColours, worldData.alliances, worldData.players, worldData.towns])
 
     return (
         <MapContainer
@@ -24,18 +34,8 @@ const LeafletMap = ({ worldData, allianceColours }: { worldData: WorldData, alli
             maxZoom={5}
         >
             <GridLayer />
-            <OceansLayer />
-            {
-                worldData.alliances.map(alliance =>
-                    <Alliance
-                        key={alliance.id}
-                        alliance={alliance}
-                        players={worldData.players}
-                        towns={worldData.towns}
-                        allianceColours={allianceColours}
-                    />
-                )
-            }
+            <OceansLayer renderOption={oceanRenderOption} />
+            {towns}
         </MapContainer>
     )
 }

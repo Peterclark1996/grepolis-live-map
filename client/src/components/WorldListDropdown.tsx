@@ -44,12 +44,12 @@ const WorldListDropdown = () => {
                 </div>
             </div>
             <div>
-                <div className={`position-absolute overflow-hidden w-100 ${classes.optionsContainer}`}>
+                <div className={`position-absolute overflow-hidden w-100 ${classes.optionsContainer} ${showingOptions && classes.open}`}>
                     <div className={`d-flex flex-column overflow-auto w-100 ${classes.options} ${showingOptions && classes.open}`}>
                         {
                             worlds.filter(world => !world.isClosed).map(world => <WorldListDropdownOption key={world.id} world={world} onClick={() => onSelectWorld(world)} />)
                         }
-                        <div className="d-flex flex-grow-1 border mx-3 "></div>
+                        <div className="d-flex flex-grow-1 border mx-3 " />
                         {
                             worlds.filter(world => world.isClosed).map(world => <WorldListDropdownOption key={world.id} world={world} onClick={() => onSelectWorld(world)} />)
                         }

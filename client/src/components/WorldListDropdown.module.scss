@@ -25,7 +25,11 @@
 .optionsContainer {
     min-width: calc(100% + 40px);
     left: -20px;
-    padding: 0px 20px 20px 20px;
+    padding: 0px 20px 0px 20px;
+
+    &.open {
+        padding: 0px 20px 20px 20px;
+    }
 }
 
 .options {

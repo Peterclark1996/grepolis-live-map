@@ -3,6 +3,7 @@ import classes from "./AllianceButton.module.scss"
 import allianceIcon from "../img/icon_alliance.png"
 import pointsIcon from "../img/icon_points.png"
 import playerIcon from "../img/icon_player.png"
+import { renderNumberAsString } from "../helpers"
 
 const AllianceButton = ({ alliance, position, colour, selected, onClick }: {
     alliance: Alliance,
@@ -38,7 +39,7 @@ const AllianceButton = ({ alliance, position, colour, selected, onClick }: {
                         </div>
                         <div className={`d-flex align-items-center ${classes.infoTag}`}>
                             <img className="me-1" src={pointsIcon} />
-                            {alliance.points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            {renderNumberAsString(alliance.points)}
                         </div>
                         <div className={`d-flex align-items-center ${classes.infoTag}`}>
                             <img className="me-1" src={playerIcon} />

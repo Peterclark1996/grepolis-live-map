@@ -8,6 +8,7 @@ import allianceIcon from "../../img/icon_alliance.png"
 import playerIcon from "../../img/icon_player.png"
 import pointsIcon from "../../img/icon_points.png"
 import townIcon from "../../img/icon_town.png"
+import { renderNumberAsString } from "../../helpers"
 
 const LeafletPlayer = ({ player, alliance, towns, allianceColours }: { player: Player, alliance: Alliance, towns: Town[], allianceColours: AllianceColour[] }) => {
 
@@ -19,24 +20,25 @@ const LeafletPlayer = ({ player, alliance, towns, allianceColours }: { player: P
                 towns
                     .filter(town => town.playerId === player.id)
                     .map(town =>
-                        <Circle center={[town.x, town.y]} color={colour} radius={town.size}>
+                        <Circle key={town.id} center={[town.x, town.y]} color={colour} radius={town.size}>
                             <Tooltip>
-                                <div className="d-flex flex-column align-items-center">
-                                    <div>
-                                        <img src={townIcon} alt="Town" />
-                                        <span className="ms-1">{town.name}</span>
-                                    </div>
-                                    <div>
+                                <div className="d-flex flex-column">
+                                    <div className="mx-auto">
                                         <img src={playerIcon} alt="Player" />
                                         <span className="ms-1">{player.name}</span>
                                     </div>
-                                    <div>
-                                        <img src={pointsIcon} alt="Points" />
-                                        <span className="ms-1">{player.points}</span>
-                                    </div>
-                                    <div>
+                                    <div className="mx-auto">
                                         <img src={allianceIcon} alt="Alliance" />
                                         <span className="ms-1">{alliance.name}</span>
+                                    </div>
+                                    <div className="d-flex flex-grow-1 border my-1" />
+                                    <div className="mx-auto">
+                                        <img src={townIcon} alt="Town" />
+                                        <span className="ms-1">{town.name}</span>
+                                    </div>
+                                    <div className="mx-auto">
+                                        <img src={pointsIcon} alt="Points" />
+                                        <span className="ms-1">{renderNumberAsString(town.points)}</span>
                                     </div>
                                 </div>
                             </Tooltip>
