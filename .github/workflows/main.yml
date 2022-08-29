@@ -36,6 +36,7 @@ jobs:
         terraform plan -out=plan -var="service_name=$SERVICE_NAME" -var="location=$SERVICE_LOCATION" -var="subscription_id=$AZURE_SUBSCRIPTION_ID" -var="tenant_id=$AZURE_TENANT_ID" -var="client_id=$AZURE_CLIENT_ID" -var="client_secret=$AZURE_CLIENT_SECRET"
         terraform apply "plan"
         echo "STORAGE_ACCOUNT_URL=$(terraform output storage_account_url)" >> $GITHUB_ENV
+        echo "STORAGE_ACCOUNT_CONNECTION_STRING=$(terraform output storage_account_connection_string)" >> $GITHUB_ENV
 
     - name: Setup Node Environment
       uses: actions/setup-node@v2
@@ -66,16 +67,16 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          az functionapp config appsettings set --name "${{ env.SERVICE_NAME }}-azfunc" --resource-group "${{ env.SERVICE_NAME }}-rg" --settings "AZURE_STORAGE_CONNECTION=${{ secrets.AZURE_STORAGE_CONNECTION }}"
+          az functionapp config appsettings set --name "${{ env.SERVICE_NAME }}-azfunc" --resource-group "${{ env.SERVICE_NAME }}-rg" --settings "AZURE_STORAGE_CONNECTION=${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}"
           
-          az storage blob service-properties update --static-website --404-document "index.html" --index-document "index.html" --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}"
-          az storage blob delete-batch --source '$web' --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}"
-          az storage blob upload-batch -s "./client/dist" -d '$web' --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}"
+          az storage blob service-properties update --static-website --404-document "index.html" --index-document "index.html" --connection-string "${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}"
+          az storage blob delete-batch --source '$web' --connection-string "${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}"
+          az storage blob upload-batch -s "./client/dist" -d '$web' --connection-string "${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}"
 
-          $containerExistsResponse = az storage container exists --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}" --name "world-data"
+          $containerExistsResponse = az storage container exists --connection-string "${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}" --name "world-data"
           $containerExists = ($containerExistsResponse | ConvertFrom-Json).exists
           if(!$containerExists){
-              az storage container create --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}" --name "world-data" --public-access blob
+              az storage container create --connection-string "${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}" --name "world-data" --public-access blob
           }
         azPSVersion: "latest"
 
