@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    name: Infrastructure
+    name: Build and Deploy
     runs-on: ubuntu-latest
     env:
       TERRAFORM_RESOURCE_GROUP: ${{ 'terraform' }}
@@ -27,37 +27,30 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Terraform Init
-      id: init
+    - name: Terraform
       working-directory: ./terraform
-      run: terraform init -backend-config="resource_group_name=$TERRAFORM_RESOURCE_GROUP" -backend-config="storage_account_name=$TERRAFORM_STORAGE_ACCOUNT" -backend-config="container_name=$TERRAFORM_CONTAINER" -backend-config="key=$TERRAFORM_KEY" -backend-config="access_key=$TERRAFORM_ACCESS_KEY" 
-
-    - name: Terraform Plan
-      id: plan
-      working-directory: ./terraform
-      run: terraform plan -out=plan -var="service_name=$SERVICE_NAME" -var="location=$SERVICE_LOCATION" -var="subscription_id=$AZURE_SUBSCRIPTION_ID" -var="tenant_id=$AZURE_TENANT_ID" -var="client_id=$AZURE_CLIENT_ID" -var="client_secret=$AZURE_CLIENT_SECRET"
-
-    - name: Terraform Apply
-      id: apply
-      working-directory: ./terraform
-      run: terraform apply "plan"
+      run: |
+        terraform init -backend-config="resource_group_name=$TERRAFORM_RESOURCE_GROUP" -backend-config="storage_account_name=$TERRAFORM_STORAGE_ACCOUNT" -backend-config="container_name=$TERRAFORM_CONTAINER" -backend-config="key=$TERRAFORM_KEY" -backend-config="access_key=$TERRAFORM_ACCESS_KEY" 
+        terraform plan -out=plan -var="service_name=$SERVICE_NAME" -var="location=$SERVICE_LOCATION" -var="subscription_id=$AZURE_SUBSCRIPTION_ID" -var="tenant_id=$AZURE_TENANT_ID" -var="client_id=$AZURE_CLIENT_ID" -var="client_secret=$AZURE_CLIENT_SECRET"
+        terraform apply "plan"
 
     - name: Setup Node Environment
       uses: actions/setup-node@v2
       with:
         node-version: 14.x
 
-    - name: Func Install
+    - name: Build Func
       working-directory: ./func
-      run: npm install
+      run: |
+        npm install
+        npm run build
+        npm test
 
-    - name: Func build
-      working-directory: ./func
-      run: npm run build
-
-    - name: Func test
-      working-directory: ./func
-      run: npm test
+    - name: Build Client
+      working-directory: ./client
+      run: |
+        npm install
+        npm run build
 
     - name: Login to Azure
       uses: azure/login@v1
@@ -65,12 +58,15 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         enable-AzPSSession: true 
 
-    - name: Configure azure resources
+    - name: Setup Aazure Resources
       uses: azure/powershell@v1
       with:
         inlineScript: |
           az functionapp config appsettings set --name "${{ env.SERVICE_NAME }}-azfunc" --resource-group "${{ env.SERVICE_NAME }}-rg" --settings "AZURE_STORAGE_CONNECTION=${{ secrets.AZURE_STORAGE_CONNECTION }}"
           
+          az storage blob service-properties update --static-website --404-document "index.html" --index-document "index.html" --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}"
+          az storage blob upload-batch -s "./client/dist" -d '$web' --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}"
+
           $containerExistsResponse = az storage container exists --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}" --name "world-data"
           $containerExists = ($containerExistsResponse | ConvertFrom-Json).exists
           if(!$containerExists){
