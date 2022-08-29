@@ -1,4 +1,6 @@
-export const BASE_CONTENT_URL = "https://savingwhale.blob.core.windows.net/world-data"
+import config from "../config.json"
+
+export const BASE_CONTENT_URL = config.storageAccountUrl + "/world-data"
 
 export const DEFAULT_ALLIANCE_COLOUR = "#676767"
 

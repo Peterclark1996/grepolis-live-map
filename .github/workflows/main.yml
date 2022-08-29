@@ -33,6 +33,7 @@ jobs:
         terraform init -backend-config="resource_group_name=$TERRAFORM_RESOURCE_GROUP" -backend-config="storage_account_name=$TERRAFORM_STORAGE_ACCOUNT" -backend-config="container_name=$TERRAFORM_CONTAINER" -backend-config="key=$TERRAFORM_KEY" -backend-config="access_key=$TERRAFORM_ACCESS_KEY" 
         terraform plan -out=plan -var="service_name=$SERVICE_NAME" -var="location=$SERVICE_LOCATION" -var="subscription_id=$AZURE_SUBSCRIPTION_ID" -var="tenant_id=$AZURE_TENANT_ID" -var="client_id=$AZURE_CLIENT_ID" -var="client_secret=$AZURE_CLIENT_SECRET"
         terraform apply "plan"
+        echo "##vso[task.setvariable variable=storageAccountUrl]`terraform output -json storage_account_url`"
 
     - name: Setup Node Environment
       uses: actions/setup-node@v2
@@ -49,6 +50,7 @@ jobs:
     - name: Build Client
       working-directory: ./client
       run: |
+        tee config.json <<< "{\"storageAccountUrl\": \"$storageAccountUrl\"}"
         npm install
         npm run build
 
