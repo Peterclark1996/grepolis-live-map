@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import AllianceList from "./components/AllianceList"
 import ErrorBox from "./components/ErrorBox"
 import LeafletMap from "./components/Leaflet/LeafletMap"
@@ -46,11 +46,14 @@ const LoadedWorldPage = () => {
             colour: ALLIANCE_COLOURS[index]
         })), [topAlliances])
 
+    const setAllianceLayer = useCallback((allianceId: number, ref: React.RefObject<Layer>) =>
+        setAllianceLayers(allianceLayers => [
+            ...allianceLayers.filter(layer => layer.id != allianceId),
+            { id: allianceId, ref }]
+        ), [])
+
     if (worldDatesErrored || worldDataErrored) return <ErrorBox message="Failed to fetch world data" />
     if (worldDatesLoading || worldDates == undefined || worldDataLoading || worldData == undefined) return <LoadingSpinner />
-
-    const setAllianceLayer = (allianceId: number, ref: React.RefObject<Layer>) =>
-        setAllianceLayers(allianceLayers => [...allianceLayers.filter(layer => layer.id != allianceId), { id: allianceId, ref }])
 
     const showLayer = (ref: React.RefObject<Layer>) => {
         if (map === undefined) return
