@@ -33,7 +33,8 @@ jobs:
         terraform init -backend-config="resource_group_name=$TERRAFORM_RESOURCE_GROUP" -backend-config="storage_account_name=$TERRAFORM_STORAGE_ACCOUNT" -backend-config="container_name=$TERRAFORM_CONTAINER" -backend-config="key=$TERRAFORM_KEY" -backend-config="access_key=$TERRAFORM_ACCESS_KEY" 
         terraform plan -out=plan -var="service_name=$SERVICE_NAME" -var="location=$SERVICE_LOCATION" -var="subscription_id=$AZURE_SUBSCRIPTION_ID" -var="tenant_id=$AZURE_TENANT_ID" -var="client_id=$AZURE_CLIENT_ID" -var="client_secret=$AZURE_CLIENT_SECRET"
         terraform apply "plan"
-        echo "##vso[task.setvariable variable=storageAccountUrl]`terraform output -json storage_account_url`"
+        tfOutputStorageAccountUrl = terraform output -json storage_account_url
+        echo "storageAccountUrl=$(tfOutputStorageAccountUrl)" >> $GITHUB_ENV
 
     - name: Setup Node Environment
       uses: actions/setup-node@v2
@@ -50,7 +51,7 @@ jobs:
     - name: Build Client
       working-directory: ./client
       run: |
-        tee config.json <<< "{\"storageAccountUrl\": \"$storageAccountUrl\"}"
+        tee config.json <<< "{\"storageAccountUrl\": \"$(storageAccountUrl)\"}"
         npm install
         npm run build
 
@@ -67,6 +68,7 @@ jobs:
           az functionapp config appsettings set --name "${{ env.SERVICE_NAME }}-azfunc" --resource-group "${{ env.SERVICE_NAME }}-rg" --settings "AZURE_STORAGE_CONNECTION=${{ secrets.AZURE_STORAGE_CONNECTION }}"
           
           az storage blob service-properties update --static-website --404-document "index.html" --index-document "index.html" --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}"
+          az storage blob delete-batch --source '$web' --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}"
           az storage blob upload-batch -s "./client/dist" -d '$web' --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}"
 
           $containerExistsResponse = az storage container exists --connection-string "${{ secrets.AZURE_STORAGE_CONNECTION }}" --name "world-data"
