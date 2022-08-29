@@ -69,14 +69,14 @@ jobs:
         inlineScript: |
           az functionapp config appsettings set --name "${{ env.SERVICE_NAME }}-azfunc" --resource-group "${{ env.SERVICE_NAME }}-rg" --settings "AZURE_STORAGE_CONNECTION=${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}"
           
-          az storage blob service-properties update --static-website --404-document "index.html" --index-document "index.html" --connection-string "${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}"
-          az storage blob delete-batch --source '$web' --connection-string "${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}"
-          az storage blob upload-batch -s "./client/dist" -d '$web' --connection-string "${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}"
+          az storage blob service-properties update --static-website --404-document "index.html" --index-document "index.html" --connection-string ${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}
+          az storage blob delete-batch --source '$web' --connection-string ${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}
+          az storage blob upload-batch -s "./client/dist" -d '$web' --connection-string ${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}
 
-          $containerExistsResponse = az storage container exists --connection-string "${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}" --name "world-data"
+          $containerExistsResponse = az storage container exists --connection-string ${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }} --name "world-data"
           $containerExists = ($containerExistsResponse | ConvertFrom-Json).exists
           if(!$containerExists){
-              az storage container create --connection-string "${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}" --name "world-data" --public-access blob
+              az storage container create --connection-string ${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }} --name "world-data" --public-access blob
           }
         azPSVersion: "latest"
 
