@@ -1,4 +1,5 @@
-import { useRef } from "react"
+import { Layer } from "leaflet"
+import { useEffect, useRef } from "react"
 import { LayerGroup } from "react-leaflet"
 import { Alliance } from "../../types/Alliance"
 import { AllianceColour } from "../../types/AllianceColour"
@@ -6,9 +7,17 @@ import { Player } from "../../types/Player"
 import { Town } from "../../types/Town"
 import LeafletPlayer from "./LeafletPlayer"
 
-const LeafletAlliance = ({ alliance, players, towns, allianceColours }: { alliance: Alliance, players: Player[], towns: Town[], allianceColours: AllianceColour[] }) => {
+const LeafletAlliance = ({ alliance, players, towns, allianceColours, setAllianceLayer }: {
+    alliance: Alliance,
+    players: Player[],
+    towns: Town[],
+    allianceColours: AllianceColour[],
+    setAllianceLayer: (allianceId: number, ref: React.RefObject<Layer>) => void
+}) => {
 
     const ref = useRef(null)
+
+    useEffect(() => setAllianceLayer(alliance.id, ref), [setAllianceLayer, alliance.id])
 
     return (
         <LayerGroup ref={ref}>

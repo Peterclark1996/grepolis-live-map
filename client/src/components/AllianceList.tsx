@@ -1,11 +1,19 @@
+import { Layer } from "leaflet";
 import { useState } from "react";
 import { DEFAULT_ALLIANCE_COLOUR } from "../constants";
 import { Alliance } from "../types/Alliance"
 import { AllianceColour } from "../types/AllianceColour";
+import { LeafletLayer } from "../types/LeafletLayer";
 import AllianceButton from "./AllianceButton"
 import classes from "./AllianceList.module.scss"
 
-const AllianceList = ({ alliances, allianceColours }: { alliances: Alliance[], allianceColours: AllianceColour[] }) => {
+const AllianceList = ({ alliances, allianceColours, allianceLayers, showLayer, hideLayer }: {
+    alliances: Alliance[],
+    allianceColours: AllianceColour[],
+    allianceLayers: LeafletLayer[],
+    showLayer: (ref: React.RefObject<Layer>) => void
+    hideLayer: (ref: React.RefObject<Layer>) => void
+}) => {
 
     const [selectedAllianceIds, setSelectedAllianceIds] = useState<number[]>(alliances.map(a => a.id))
 
@@ -14,8 +22,18 @@ const AllianceList = ({ alliances, allianceColours }: { alliances: Alliance[], a
     const onAllianceClicked = (alliance: Alliance) => {
         if (isAllianceSelected(alliance)) {
             setSelectedAllianceIds(selectedAllianceIds.filter(id => id !== alliance.id))
+
+            const layer = allianceLayers.find(layer => layer.id === alliance.id)
+            if (layer === undefined) return
+            hideLayer(layer.ref)
+
         } else {
             setSelectedAllianceIds([...selectedAllianceIds, alliance.id])
+
+            const layer = allianceLayers.find(layer => layer.id === alliance.id)
+            if (layer === undefined) return
+            showLayer(layer.ref)
+
         }
     }
 

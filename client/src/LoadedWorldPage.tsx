@@ -9,13 +9,17 @@ import { ALLIANCE_COLOURS, BASE_CONTENT_URL } from "./constants"
 import useApi from "./hooks/useApi"
 import { useSelection } from "./hooks/useSelection"
 import { AllianceColour } from "./types/AllianceColour"
+import { LeafletLayer } from "./types/LeafletLayer"
 import { OceanRenderOption } from "./types/enums/OceanRenderOption"
 import { WorldData } from "./types/WorldData"
+import { Layer } from "leaflet"
 
 const LoadedWorldPage = () => {
 
     const [oceanRenderOption, setOceanRenderOption] = useState(OceanRenderOption.Outer)
+    const [allianceLayers, setAllianceLayers] = useState<LeafletLayer[]>([])
     const { selectedWorld } = useSelection()
+    const [map, setMap] = useState<L.Map>()
 
     const { data: worldDates, errored: worldDatesErrored, loading: worldDatesLoading } = useApi<string[]>(
         `${BASE_CONTENT_URL}/${selectedWorld?.id}/info.json`,
@@ -45,6 +49,23 @@ const LoadedWorldPage = () => {
     if (worldDatesErrored || worldDataErrored) return <ErrorBox message="Failed to fetch world data" />
     if (worldDatesLoading || worldDates == undefined || worldDataLoading || worldData == undefined) return <LoadingSpinner />
 
+    const setAllianceLayer = (allianceId: number, ref: React.RefObject<Layer>) =>
+        setAllianceLayers(allianceLayers => [...allianceLayers.filter(layer => layer.id != allianceId), { id: allianceId, ref }])
+
+    const showLayer = (ref: React.RefObject<Layer>) => {
+        if (map === undefined) return
+        if (ref.current == null) return
+        map.addLayer(ref.current)
+    }
+
+    const hideLayer = (ref: React.RefObject<Layer>) => {
+        if (map === undefined) return
+        if (ref.current == null) return
+        map.removeLayer(ref.current)
+    }
+
+
+
     return (
         <div className="d-flex flex-grow-1">
             <div className="d-flex flex-column w-25 pt-4 px-4">
@@ -58,9 +79,21 @@ const LoadedWorldPage = () => {
                     />
                 </div>
                 <div className="mt-2" />
-                <AllianceList alliances={topAlliances} allianceColours={allianceColours} />
+                <AllianceList
+                    alliances={topAlliances}
+                    allianceColours={allianceColours}
+                    allianceLayers={allianceLayers}
+                    showLayer={showLayer}
+                    hideLayer={hideLayer}
+                />
             </div>
-            <LeafletMap worldData={worldData} allianceColours={allianceColours} oceanRenderOption={oceanRenderOption} />
+            <LeafletMap
+                worldData={worldData}
+                allianceColours={allianceColours}
+                oceanRenderOption={oceanRenderOption}
+                setAllianceLayer={setAllianceLayer}
+                setMap={setMap}
+            />
         </div>
     )
 }
