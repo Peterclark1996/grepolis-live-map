@@ -32,7 +32,7 @@ jobs:
     - name: Terraform
       uses: azure/powershell@v1
       id: terraform
-      working-directory: ./terraform
+      workingDirectory: ./terraform
       with:
         inlineScript: |
           terraform init -backend-config="resource_group_name=$TERRAFORM_RESOURCE_GROUP" -backend-config="storage_account_name=$TERRAFORM_STORAGE_ACCOUNT" -backend-config="container_name=$TERRAFORM_CONTAINER" -backend-config="key=$TERRAFORM_KEY" -backend-config="access_key=$TERRAFORM_ACCESS_KEY" 
