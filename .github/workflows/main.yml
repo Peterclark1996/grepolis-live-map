@@ -90,6 +90,7 @@ jobs:
           $profile = ""
           $profile = Get-AzWebAppPublishingProfile -ResourceGroupName "${{ env.SERVICE_NAME }}-rg" -Name "${{ env.SERVICE_NAME }}-azfunc"
           $profile = $profile.Replace("`r", "").Replace("`n", "")
+          Write-Output "::add-mask::$profile"
           Write-Output "::set-output name=pubprofile::$profile"
           Remove-Variable profile
         azPSVersion: "latest"
