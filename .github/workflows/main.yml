@@ -36,8 +36,7 @@ jobs:
         terraform plan -out=plan -var="service_name=$SERVICE_NAME" -var="location=$SERVICE_LOCATION" -var="subscription_id=$AZURE_SUBSCRIPTION_ID" -var="tenant_id=$AZURE_TENANT_ID" -var="client_id=$AZURE_CLIENT_ID" -var="client_secret=$AZURE_CLIENT_SECRET"
         terraform apply "plan"
         echo "STORAGE_ACCOUNT_URL=$(terraform output storage_account_url)" >> $GITHUB_ENV
-
-        saConnString = $(terraform output storage_account_connection_string)
+        saConnString="$(terraform output storage_account_connection_string)"
         echo "Masking connection string:"
         echo "::add-mask::$saConnString"
         echo "STORAGE_ACCOUNT_CONNECTION_STRING=$saConnString" >> $GITHUB_ENV
