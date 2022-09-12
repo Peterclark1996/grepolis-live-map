@@ -35,8 +35,12 @@ jobs:
         terraform init -backend-config="resource_group_name=$TERRAFORM_RESOURCE_GROUP" -backend-config="storage_account_name=$TERRAFORM_STORAGE_ACCOUNT" -backend-config="container_name=$TERRAFORM_CONTAINER" -backend-config="key=$TERRAFORM_KEY" -backend-config="access_key=$TERRAFORM_ACCESS_KEY" 
         terraform plan -out=plan -var="service_name=$SERVICE_NAME" -var="location=$SERVICE_LOCATION" -var="subscription_id=$AZURE_SUBSCRIPTION_ID" -var="tenant_id=$AZURE_TENANT_ID" -var="client_id=$AZURE_CLIENT_ID" -var="client_secret=$AZURE_CLIENT_SECRET"
         terraform apply "plan"
-        echo "STORAGE_ACCOUNT_URL=$("::add-mask::" + $(terraform output storage_account_url))" >> $GITHUB_ENV
-        echo "STORAGE_ACCOUNT_CONNECTION_STRING=$("::add-mask::" + $(terraform output storage_account_connection_string))" >> $GITHUB_ENV
+        echo "STORAGE_ACCOUNT_URL=$(terraform output storage_account_url)" >> $GITHUB_ENV
+
+        saConnString = $(terraform output storage_account_connection_string)
+        echo "Masking connection string:"
+        echo "::add-mask::$saConnString"
+        echo "STORAGE_ACCOUNT_CONNECTION_STRING=$saConnString" >> $GITHUB_ENV
 
     - name: Setup Node Environment
       uses: actions/setup-node@v2
