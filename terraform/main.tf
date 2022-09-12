@@ -32,6 +32,16 @@ resource "azurerm_storage_account" "main" {
     error_404_document = "index.html"
     index_document = "index.html"
   }
+
+  blob_properties{
+    cors_rule{
+        allowed_headers = ["*"]
+        allowed_methods = ["GET","OPTIONS"]
+        allowed_origins = [azurerm_storage_account.main.primary_blob_endpoint]
+        exposed_headers = ["*"]
+        max_age_in_seconds = 3600
+        }
+    }
 }
 
 resource "azurerm_service_plan" "main" {
