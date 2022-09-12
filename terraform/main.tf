@@ -27,6 +27,11 @@ resource "azurerm_storage_account" "main" {
   location = var.location
   account_tier = "Standard"
   account_replication_type = "LRS"
+
+  static_website {
+    error_404_document = "index.html"
+    index_document = "index.html"
+  }
 }
 
 resource "azurerm_service_plan" "main" {
@@ -51,5 +56,9 @@ resource "azurerm_linux_function_app" "main" {
     application_stack {
       node_version = "14"
     }
+  }
+
+  app_settings = {
+    AZURE_STORAGE_CONNECTION = azurerm_storage_account.main.primary_connection_string
   }
 }
