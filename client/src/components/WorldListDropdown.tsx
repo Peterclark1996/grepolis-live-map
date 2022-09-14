@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { useSelection } from "../hooks/useSelection"
+import useSelection from "../hooks/useSelection"
 import { World } from "../types/World"
 import classes from "./WorldListDropdown.module.scss"
 import WorldListDropdownOption from "./WorldListDropdownOption"
 
-const WorldListDropdown = () => {
+const WorldListDropdown = ({ worlds }: { worlds: World[] }) => {
     const [showingOptions, setShowingOptions] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
 
-    const { worlds, selectedWorld, setSelectedWorld } = useSelection()
+    const { selectedWorldId, setSelectedWorld } = useSelection()
 
     const onSelectWorld = (world: World) => {
         setSelectedWorld(world)
@@ -25,6 +25,8 @@ const WorldListDropdown = () => {
         document.addEventListener("click", handleClickOutsideComponent)
         return () => document.removeEventListener("click", handleClickOutsideComponent)
     }, [handleClickOutsideComponent])
+
+    const selectedWorld = worlds.find(world => world.id === selectedWorldId)
 
     return (
         <div ref={ref} className="d-flex flex-column position-relative">

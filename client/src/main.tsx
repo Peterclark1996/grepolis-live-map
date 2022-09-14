@@ -6,14 +6,11 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import "@fortawesome/fontawesome-free/css/all.min.css"
 import 'leaflet/dist/leaflet.css'
 import { BrowserRouter } from 'react-router-dom'
-import { SelectionProvider } from './hooks/useSelection'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter >
-      <SelectionProvider>
-        <App />
-      </SelectionProvider>
+      <App />
     </BrowserRouter >
   </React.StrictMode>
 )

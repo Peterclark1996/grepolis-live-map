@@ -1,11 +1,11 @@
 import { LayerGroup, ImageOverlay } from "react-leaflet"
 import { BASE_CONTENT_URL } from "../../constants"
-import { useSelection } from "../../hooks/useSelection"
+import useSelection from "../../hooks/useSelection"
 import sea from "../../img/sea.png"
 import { OceanRenderOption } from "../../types/enums/OceanRenderOption"
 
 const OceansLayer = ({ renderOption }: { renderOption: string }) => {
-    const { selectedWorld } = useSelection()
+    const { selectedWorldId } = useSelection()
 
     const getOceanUrl = (xIndex: number, yIndex: number): string => {
         switch (renderOption) {
@@ -14,13 +14,13 @@ const OceansLayer = ({ renderOption }: { renderOption: string }) => {
             case OceanRenderOption.Center:
                 if (xIndex !== 4 && xIndex !== 5) return sea
                 if (yIndex !== 4 && yIndex !== 5) return sea
-                return `${BASE_CONTENT_URL}/${selectedWorld?.id}/ocean/${xIndex}_${yIndex}.png`
+                return `${BASE_CONTENT_URL}/${selectedWorldId}/ocean/${xIndex}_${yIndex}.png`
             case OceanRenderOption.Outer:
                 if (xIndex < 3 || xIndex > 6) return sea
                 if (yIndex < 3 || yIndex > 6) return sea
-                return `${BASE_CONTENT_URL}/${selectedWorld?.id}/ocean/${xIndex}_${yIndex}.png`
+                return `${BASE_CONTENT_URL}/${selectedWorldId}/ocean/${xIndex}_${yIndex}.png`
             case OceanRenderOption.All:
-                return `${BASE_CONTENT_URL}/${selectedWorld?.id}/ocean/${xIndex}_${yIndex}.png`
+                return `${BASE_CONTENT_URL}/${selectedWorldId}/ocean/${xIndex}_${yIndex}.png`
             default:
                 return sea
         }

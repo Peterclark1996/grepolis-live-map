@@ -12,9 +12,9 @@ const TabbedOptions = ({ title, options, selectedOption, setSelectedOption }: {
     setSelectedOption: (option: string) => void
 }) => {
     return (
-        <div className="d-flex flex-column align-items-center">
-            <span className={`px-2 mb-1 ${classes.title}`}>
-                {title}
+        <div className="d-flex">
+            <span className={`px-2 me-2 ${classes.title}`}>
+                {title}:
             </span>
             <div className={`d-flex ${classes.options}`}>
                 {
