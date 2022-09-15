@@ -7,7 +7,7 @@ import { Player } from "../../types/Player"
 import { Town } from "../../types/Town"
 import LeafletPlayer from "./LeafletPlayer"
 
-const LeafletAlliance = ({ alliance, players, towns, allianceColours, setAllianceLayer }: {
+const AllianceLayer = ({ alliance, players, towns, allianceColours, setAllianceLayer }: {
     alliance: Alliance,
     players: Player[],
     towns: Town[],
@@ -38,4 +38,4 @@ const LeafletAlliance = ({ alliance, players, towns, allianceColours, setAllianc
     )
 }
 
-export default LeafletAlliance
+export default AllianceLayer

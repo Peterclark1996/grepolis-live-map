@@ -27,10 +27,13 @@ const LeafletPlayer = ({ player, alliance, towns, allianceColours }: { player: P
                                         <img src={playerIcon} alt="Player" />
                                         <span className="ms-1">{player.name}</span>
                                     </div>
-                                    <div className="mx-auto">
-                                        <img src={allianceIcon} alt="Alliance" />
-                                        <span className="ms-1">{alliance.name}</span>
-                                    </div>
+                                    {
+                                        alliance.id !== 0 &&
+                                        <div className="mx-auto">
+                                            <img src={allianceIcon} alt="Alliance" />
+                                            <span className="ms-1">{alliance.name}</span>
+                                        </div>
+                                    }
                                     <div className="d-flex flex-grow-1 border my-1" />
                                     <div className="mx-auto">
                                         <img src={townIcon} alt="Town" />

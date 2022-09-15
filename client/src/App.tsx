@@ -1,5 +1,5 @@
 import { Layer } from "leaflet"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import AllianceList from "./components/AllianceList"
 import DatePicker from "./components/DatePicker"
 import ErrorBox from "./components/ErrorBox"
@@ -7,7 +7,7 @@ import LeafletMap from "./components/Leaflet/LeafletMap"
 import LoadingSpinner from "./components/LoadingSpinner"
 import TabbedOptions from "./components/TabbedOptions"
 import WorldListDropdown from "./components/WorldListDropdown"
-import { ALLIANCE_COLOURS, BASE_CONTENT_URL } from "./constants"
+import { ALLIANCE_COLOURS, ALLIANCE_COUNT_TO_SHOW, BASE_CONTENT_URL } from "./constants"
 import useApi from "./hooks/useApi"
 import useSelection from "./hooks/useSelection"
 import { AllianceColour } from "./types/AllianceColour"
@@ -20,7 +20,9 @@ import { WorldInfo } from "./types/WorldInfo"
 const App = () => {
 
     const [oceanRenderOption, setOceanRenderOption] = useState(OceanRenderOption.Outer)
+    const [showingGreyPlayers, setShowingGreyPlayers] = useState(true)
     const [allianceLayers, setAllianceLayers] = useState<LeafletLayer[]>([])
+    const [greyPlayerLayer, setGreyPlayerLayer] = useState<Layer | null>(null)
     const [map, setMap] = useState<L.Map>()
     const { selectedWorldId, selectedDate } = useSelection()
 
@@ -29,7 +31,7 @@ const App = () => {
     const worldDataQuery = useApi<WorldData>(`${BASE_CONTENT_URL}/${selectedWorldId}/data/${selectedDate}.json`, selectedWorldId !== undefined && selectedDate !== undefined)
 
     const topAlliances = useMemo(() =>
-        worldDataQuery.data === undefined ? [] : worldDataQuery.data.alliances.sort((a, b) => a.points < b.points ? 1 : -1).slice(0, 14),
+        worldDataQuery.data === undefined ? [] : worldDataQuery.data.alliances.sort((a, b) => a.points < b.points ? 1 : -1).slice(0, ALLIANCE_COUNT_TO_SHOW),
         [worldDataQuery.data]
     )
 
@@ -57,6 +59,22 @@ const App = () => {
         map.removeLayer(ref.current)
     }
 
+    const setNonTopAlliancePlayersLayer = (ref: React.RefObject<Layer>) => {
+        const current = ref.current
+        if (current === null) return
+        setGreyPlayerLayer(current)
+    }
+
+    useEffect(() => {
+        if (map === undefined || map === null) return
+        if (greyPlayerLayer === null) return
+        if (showingGreyPlayers) {
+            map.addLayer(greyPlayerLayer)
+            return
+        }
+        map.removeLayer(greyPlayerLayer)
+    }, [greyPlayerLayer, map, showingGreyPlayers])
+
     const getWorldListDropdown = () => {
         if (worldsQuery.errored) return <ErrorBox message="Failed to fetch worlds" />
         if (worldsQuery.loading) return <LoadingSpinner />
@@ -82,6 +100,7 @@ const App = () => {
                     allianceColours={allianceColours}
                     oceanRenderOption={oceanRenderOption}
                     setAllianceLayer={setAllianceLayer}
+                    setNonTopAlliancePlayersLayer={setNonTopAlliancePlayersLayer}
                     setMap={setMap}
                 />
             </div>
@@ -108,6 +127,14 @@ const App = () => {
                                         options={Object.entries(OceanRenderOption).map(pair => ({ label: pair[0], value: pair[1] }))}
                                         selectedOption={oceanRenderOption}
                                         setSelectedOption={setOceanRenderOption}
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-center mt-2">
+                                    <TabbedOptions
+                                        title="Grey Players"
+                                        options={[{ label: "On", value: "on" }, { label: "Off", value: "off" }]}
+                                        selectedOption={showingGreyPlayers ? "on" : "off"}
+                                        setSelectedOption={option => setShowingGreyPlayers(option === "on")}
                                     />
                                 </div>
                                 <div className="mt-2" />

@@ -3,19 +3,21 @@ import GridLayer from "./GridLayer"
 import OceansLayer from "./OceansLayer"
 import L, { Layer } from "leaflet"
 import { WorldData } from "../../types/WorldData"
-import Alliance from "./LeafletAlliance"
+import AllianceLayer from "./AllianceLayer"
 import { AllianceColour } from "../../types/AllianceColour"
 import { useMemo } from "react"
+import NonTopAlliancePlayersLayer from "./NonTopAlliancePlayersLayer"
 
-const LeafletMap = ({ worldData, allianceColours, oceanRenderOption, setAllianceLayer, setMap }: {
+const LeafletMap = ({ worldData, allianceColours, oceanRenderOption, setAllianceLayer, setNonTopAlliancePlayersLayer, setMap }: {
     worldData: WorldData,
     allianceColours: AllianceColour[],
     oceanRenderOption: string,
     setAllianceLayer: (allianceId: number, ref: React.RefObject<Layer>) => void
+    setNonTopAlliancePlayersLayer: (ref: React.RefObject<Layer>) => void
     setMap: (map: L.Map) => void
 }) => {
-    const towns = useMemo(() => worldData.alliances.map(alliance =>
-        <Alliance
+    const allianceLayers = useMemo(() => worldData.alliances.filter(a => allianceColours.find(ac => ac.id === a.id)).map(alliance =>
+        <AllianceLayer
             key={alliance.id}
             alliance={alliance}
             players={worldData.players}
@@ -39,7 +41,14 @@ const LeafletMap = ({ worldData, allianceColours, oceanRenderOption, setAlliance
         >
             <GridLayer />
             <OceansLayer renderOption={oceanRenderOption} />
-            {towns}
+            <NonTopAlliancePlayersLayer
+                players={worldData.players.filter(p => !allianceColours.find(a => a.id === p.alliance))}
+                alliances={worldData.alliances}
+                towns={worldData.towns}
+                allianceColours={allianceColours}
+                setNonTopAlliancePlayersLayer={setNonTopAlliancePlayersLayer}
+            />
+            {allianceLayers}
         </MapContainer>
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [oceanRenderOption])
