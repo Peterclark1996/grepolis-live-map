@@ -5,3 +5,17 @@
     -webkit-user-select: none;
     border-radius: 20px;
 }
+
+.input {
+    background-color: white;
+    box-shadow: inset rgba(60, 64, 67, 1) 0 1px 3px 0, inset rgba(60, 64, 67, 0.75) 0 8px 15px 3px;
+    color: #3c4043;
+    user-select: none;
+    -webkit-user-select: none;
+    border-radius: 20px;
+    border: none;
+
+    &:focus {
+        outline: none;
+    }
+}

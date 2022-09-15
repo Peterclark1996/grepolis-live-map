@@ -42,7 +42,7 @@ const AllianceList = ({ alliances, allianceColours, allianceLayers, showLayer, h
             <span className={`d-flex justify-content-center ${classes.title}`}>
                 Alliances
             </span>
-            <div className={`d-flex flex-grow-1 flex-column mt-2 px-4 overflow-auto`}>
+            <div className={`d-flex flex-grow-1 flex-column mt-2 px-3 overflow-auto`}>
                 {
                     alliances.map((alliance, index) =>
                         <AllianceButton
