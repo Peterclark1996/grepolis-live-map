@@ -39,13 +39,6 @@ resource "azurerm_storage_account" "main" {
     cors_rule{
       allowed_headers = ["*"]
       allowed_methods = ["GET","OPTIONS"]
-      allowed_origins = ["https://${lower(random_pet.main.id)}.z33.web.core.windows.net"]
-      exposed_headers = ["*"]
-      max_age_in_seconds = 3600
-    }
-    cors_rule{
-      allowed_headers = ["*"]
-      allowed_methods = ["GET","OPTIONS"]
       allowed_origins = ["https://${var.domain}"]
       exposed_headers = ["*"]
       max_age_in_seconds = 3600
