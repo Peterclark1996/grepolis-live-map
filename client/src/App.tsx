@@ -23,7 +23,7 @@ const App = () => {
     const [allianceLayers, setAllianceLayers] = useState<LeafletLayer[]>([])
     const [greyPlayerLayer, setGreyPlayerLayer] = useState<Layer | null>(null)
     const [map, setMap] = useState<L.Map>()
-    const { selectedWorldId, selectedDate } = useSelection()
+    const { selectedWorldId, setSelectedWorld, selectedDate } = useSelection()
 
     const worldsQuery = useApi<World[]>(`${BASE_CONTENT_URL}/worlds.json`)
     const infoQuery = useApi<WorldInfo>(
@@ -34,6 +34,16 @@ const App = () => {
         `${BASE_CONTENT_URL}/${selectedWorldId}/data/${selectedDate}.json`,
         selectedWorldId !== undefined && selectedDate !== undefined
     )
+
+    useEffect(() => {
+        if (selectedWorldId !== undefined) return
+        if (worldsQuery.data === undefined) return
+
+        const openWorlds = worldsQuery.data.filter(world => !world.isClosed)
+        if (openWorlds.length === 0) return
+
+        setSelectedWorld(openWorlds[0])
+    }, [selectedWorldId, setSelectedWorld, worldsQuery.data])
 
     const topAlliances = useMemo(
         () =>
