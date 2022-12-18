@@ -46,7 +46,7 @@ resource "azurerm_storage_account" "main" {
     cors_rule{
       allowed_headers = ["*"]
       allowed_methods = ["GET","OPTIONS"]
-      allowed_origins = ["https://${var.domain}/"]
+      allowed_origins = ["https://${var.domain}"]
       exposed_headers = ["*"]
       max_age_in_seconds = 3600
     }
