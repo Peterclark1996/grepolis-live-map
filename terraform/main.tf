@@ -28,6 +28,8 @@ resource "azurerm_storage_account" "main" {
   account_tier = "Standard"
   account_replication_type = "LRS"
 
+  enable_https_traffic_only = false
+
   static_website {
     error_404_document = "index.html"
     index_document = "index.html"
@@ -35,16 +37,23 @@ resource "azurerm_storage_account" "main" {
 
   blob_properties{
     cors_rule{
-        allowed_headers = ["*"]
-        allowed_methods = ["GET","OPTIONS"]
-        allowed_origins = ["https://${lower(random_pet.main.id)}.z33.web.core.windows.net"]
-        exposed_headers = ["*"]
-        max_age_in_seconds = 3600
-        }
+      allowed_headers = ["*"]
+      allowed_methods = ["GET","OPTIONS"]
+      allowed_origins = ["https://${lower(random_pet.main.id)}.z33.web.core.windows.net"]
+      exposed_headers = ["*"]
+      max_age_in_seconds = 3600
     }
+    cors_rule{
+      allowed_headers = ["*"]
+      allowed_methods = ["GET","OPTIONS"]
+      allowed_origins = ["https://${var.domain}/"]
+      exposed_headers = ["*"]
+      max_age_in_seconds = 3600
+    }
+  }
 
   custom_domain {
-    name = "grepolislivemap.com"
+    name = var.domain
     use_subdomain = true
   }
 

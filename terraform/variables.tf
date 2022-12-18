@@ -1,3 +1,8 @@
+variable "domain" {
+  description = "Domain that will be used for the static app"
+  type = string
+}
+
 variable "service_name" {
   description = "Azure service name to create"
   type = string
