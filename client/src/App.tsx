@@ -18,7 +18,6 @@ import { WorldData } from "./types/WorldData"
 import { WorldInfo } from "./types/WorldInfo"
 
 const App = () => {
-
     const [oceanRenderOption, setOceanRenderOption] = useState(OceanRenderOption.Outer)
     const [showingGreyPlayers, setShowingGreyPlayers] = useState(true)
     const [allianceLayers, setAllianceLayers] = useState<LeafletLayer[]>([])
@@ -27,25 +26,42 @@ const App = () => {
     const { selectedWorldId, selectedDate } = useSelection()
 
     const worldsQuery = useApi<World[]>(`${BASE_CONTENT_URL}/worlds.json`)
-    const infoQuery = useApi<WorldInfo>(`${BASE_CONTENT_URL}/${selectedWorldId}/info.json`, selectedWorldId !== undefined)
-    const worldDataQuery = useApi<WorldData>(`${BASE_CONTENT_URL}/${selectedWorldId}/data/${selectedDate}.json`, selectedWorldId !== undefined && selectedDate !== undefined)
+    const infoQuery = useApi<WorldInfo>(
+        `${BASE_CONTENT_URL}/${selectedWorldId}/info.json`,
+        selectedWorldId !== undefined
+    )
+    const worldDataQuery = useApi<WorldData>(
+        `${BASE_CONTENT_URL}/${selectedWorldId}/data/${selectedDate}.json`,
+        selectedWorldId !== undefined && selectedDate !== undefined
+    )
 
-    const topAlliances = useMemo(() =>
-        worldDataQuery.data === undefined ? [] : worldDataQuery.data.alliances.sort((a, b) => a.points < b.points ? 1 : -1).slice(0, ALLIANCE_COUNT_TO_SHOW),
+    const topAlliances = useMemo(
+        () =>
+            worldDataQuery.data === undefined
+                ? []
+                : worldDataQuery.data.alliances
+                      .sort((a, b) => (a.points < b.points ? 1 : -1))
+                      .slice(0, ALLIANCE_COUNT_TO_SHOW),
         [worldDataQuery.data]
     )
 
-    const allianceColours: AllianceColour[] = useMemo(() =>
-        topAlliances.map((alliance, index) => ({
-            id: alliance.id,
-            colour: ALLIANCE_COLOURS[index]
-        })), [topAlliances])
+    const allianceColours: AllianceColour[] = useMemo(
+        () =>
+            topAlliances.map((alliance, index) => ({
+                id: alliance.id,
+                colour: ALLIANCE_COLOURS[index]
+            })),
+        [topAlliances]
+    )
 
-    const setAllianceLayer = useCallback((allianceId: number, ref: React.RefObject<Layer>) =>
-        setAllianceLayers(allianceLayers => [
-            ...allianceLayers.filter(layer => layer.id != allianceId),
-            { id: allianceId, ref }
-        ]), [])
+    const setAllianceLayer = useCallback(
+        (allianceId: number, ref: React.RefObject<Layer>) =>
+            setAllianceLayers(allianceLayers => [
+                ...allianceLayers.filter(layer => layer.id != allianceId),
+                { id: allianceId, ref }
+            ]),
+        []
+    )
 
     const showLayer = (ref: React.RefObject<Layer>) => {
         if (map === undefined) return
@@ -90,8 +106,18 @@ const App = () => {
     }
 
     const getMapContent = () => {
-        if (worldDataQuery.errored) return <div className="d-flex justify-content-center w-75"><ErrorBox message="Failed to fetch world data" /></div>
-        if (worldDataQuery.loading) return <div className="d-flex justify-content-center w-75"><LoadingSpinner /></div>
+        if (worldDataQuery.errored)
+            return (
+                <div className="d-flex justify-content-center w-75">
+                    <ErrorBox message="Failed to fetch world data" />
+                </div>
+            )
+        if (worldDataQuery.loading)
+            return (
+                <div className="d-flex justify-content-center w-75">
+                    <LoadingSpinner />
+                </div>
+            )
         if (worldDataQuery.data == undefined) return <></>
         return (
             <div className="d-flex justify-content-center w-75">
@@ -115,16 +141,16 @@ const App = () => {
                 <div className="d-flex flex-grow-1 justify-content-center">
                     <div className="d-flex flex-column w-25 pt-4 px-4">
                         {getWorldListDropdown()}
-                        <div className="d-flex justify-content-center mt-2">
-                            {getDatePicker()}
-                        </div>
-                        {
-                            hasWorldData &&
+                        <div className="d-flex justify-content-center mt-2">{getDatePicker()}</div>
+                        {hasWorldData && (
                             <>
                                 <div className="d-flex justify-content-center mt-2">
                                     <TabbedOptions
                                         title="Oceans"
-                                        options={Object.entries(OceanRenderOption).map(pair => ({ label: pair[0], value: pair[1] }))}
+                                        options={Object.entries(OceanRenderOption).map(pair => ({
+                                            label: pair[0],
+                                            value: pair[1]
+                                        }))}
                                         selectedOption={oceanRenderOption}
                                         setSelectedOption={setOceanRenderOption}
                                     />
@@ -132,9 +158,14 @@ const App = () => {
                                 <div className="d-flex justify-content-center mt-2">
                                     <TabbedOptions
                                         title="Grey Players"
-                                        options={[{ label: "On", value: "on" }, { label: "Off", value: "off" }]}
+                                        options={[
+                                            { label: "On", value: "on" },
+                                            { label: "Off", value: "off" }
+                                        ]}
                                         selectedOption={showingGreyPlayers ? "on" : "off"}
-                                        setSelectedOption={option => setShowingGreyPlayers(option === "on")}
+                                        setSelectedOption={option =>
+                                            setShowingGreyPlayers(option === "on")
+                                        }
                                     />
                                 </div>
                                 <div className="mt-2" />
@@ -146,7 +177,7 @@ const App = () => {
                                     hideLayer={hideLayer}
                                 />
                             </>
-                        }
+                        )}
                     </div>
                     {getMapContent()}
                 </div>
