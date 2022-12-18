@@ -1,6 +1,8 @@
 import classes from "./ErrorBox.module.scss"
 
-const ErrorBox = ({ message }: { message: string }) => {
+type ErrorBoxProps = { message: string }
+
+const ErrorBox = ({ message }: ErrorBoxProps) => {
     return (
         <div className="m-4">
             <div className={classes.errorBox}>

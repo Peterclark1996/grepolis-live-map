@@ -5,21 +5,29 @@ import pointsIcon from "../img/icon_points.png"
 import playerIcon from "../img/icon_player.png"
 import { renderNumberAsString } from "../helpers"
 
-const AllianceButton = ({ alliance, position, colour, selected, onClick }: {
-    alliance: Alliance,
-    position: number,
-    colour: string,
-    selected: boolean,
+type AllianceButtonProps = {
+    alliance: Alliance
+    position: number
+    colour: string
+    selected: boolean
     onClick: () => void
-}) => {
+}
+
+const AllianceButton = ({ alliance, position, colour, selected, onClick }: AllianceButtonProps) => {
     return (
         <div
             className={`d-flex my-1 ${classes.toggle} ${selected && classes.selected}`}
             onClick={onClick}
             role="button"
         >
-            <div className={`d-flex flex-grow-1 ${classes.background}`} style={{ "backgroundColor": `${colour}40` }}>
-                <div className={`d-flex align-items-center me-2 px-1 ${classes.colour}`} style={{ "backgroundColor": colour }}>
+            <div
+                className={`d-flex flex-grow-1 ${classes.background}`}
+                style={{ backgroundColor: `${colour}40` }}
+            >
+                <div
+                    className={`d-flex align-items-center me-2 px-1 ${classes.colour}`}
+                    style={{ backgroundColor: colour }}
+                >
                     <input
                         className="form-check-input bg-transparent shadow-none border-0 mx-2 mb-1"
                         type="checkbox"
@@ -29,13 +37,10 @@ const AllianceButton = ({ alliance, position, colour, selected, onClick }: {
                     />
                 </div>
                 <div className="d-flex flex-grow-1 flex-column align-items-center">
-                    <div className={classes.title}>
-                        {alliance.name}
-                    </div>
+                    <div className={classes.title}>{alliance.name}</div>
                     <div className="d-flex w-100 px-3 mb-1 justify-content-around">
                         <div className={`d-flex align-items-center ${classes.infoTag}`}>
-                            <img className="me-1" src={allianceIcon} />
-                            #{position}
+                            <img className="me-1" src={allianceIcon} />#{position}
                         </div>
                         <div className={`d-flex align-items-center ${classes.infoTag}`}>
                             <img className="me-1" src={pointsIcon} />

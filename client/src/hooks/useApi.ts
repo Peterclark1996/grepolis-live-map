@@ -1,10 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 
-const useApi = <T>(
-    url: string,
-    canRun = true,
-) => {
+const useApi = <T>(url: string, canRun = true) => {
     const [lastFetchedUrl, setLastFetchedUrl] = useState<string>()
     const [data, setData] = useState<T>()
     const [errored, setErrored] = useState(false)
@@ -33,7 +30,8 @@ const useApi = <T>(
         setLoaded(false)
         setLastFetchedUrl(url)
 
-        axios.get(url)
+        axios
+            .get(url)
             .then(res => {
                 setLoaded(true)
                 setLoading(false)

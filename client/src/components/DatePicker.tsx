@@ -2,11 +2,12 @@ import { useEffect } from "react"
 import useSelection from "../hooks/useSelection"
 import classes from "./DatePicker.module.scss"
 
-const DatePicker = ({ dates }: { dates: string[] }) => {
+type DatePickerProps = { dates: string[] }
 
+const DatePicker = ({ dates }: DatePickerProps) => {
     const { selectedDate, setSelectedDate } = useSelection()
 
-    const sortedDates = dates.sort((a, b) => a < b ? 1 : -1)
+    const sortedDates = dates.sort((a, b) => (a < b ? 1 : -1))
 
     useEffect(() => {
         if (selectedDate !== undefined && dates.includes(selectedDate)) return
@@ -24,9 +25,7 @@ const DatePicker = ({ dates }: { dates: string[] }) => {
 
     return (
         <div className="d-flex">
-            <span className={`px-2 me-2 my-auto ${classes.title}`}>
-                Date:
-            </span>
+            <span className={`px-2 me-2 my-auto ${classes.title}`}>Date:</span>
             <input
                 className={`${classes.input} px-2`}
                 type="date"

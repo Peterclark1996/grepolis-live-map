@@ -8,14 +8,21 @@ import { Player } from "../../types/Player"
 import { Town } from "../../types/Town"
 import LeafletPlayer from "./LeafletPlayer"
 
-const NonTopAlliancePlayersLayer = ({ players, alliances, towns, allianceColours, setNonTopAlliancePlayersLayer }: {
-    players: Player[],
-    alliances: Alliance[],
-    towns: Town[],
-    allianceColours: AllianceColour[],
+type NonTopAlliancePlayersLayerProps = {
+    players: Player[]
+    alliances: Alliance[]
+    towns: Town[]
+    allianceColours: AllianceColour[]
     setNonTopAlliancePlayersLayer: (ref: React.RefObject<Layer>) => void
-}) => {
+}
 
+const NonTopAlliancePlayersLayer = ({
+    players,
+    alliances,
+    towns,
+    allianceColours,
+    setNonTopAlliancePlayersLayer
+}: NonTopAlliancePlayersLayerProps) => {
     const ref = useRef(null)
 
     useEffect(() => {
@@ -26,21 +33,18 @@ const NonTopAlliancePlayersLayer = ({ players, alliances, towns, allianceColours
 
     return (
         <LayerGroup ref={ref}>
-            {
-                players
-                    .map(player => {
-                        const alliance = alliances.find(a => a.id === player.alliance) || NON_TOP_ALLIANCE
-                        return (
-                            <LeafletPlayer
-                                key={player.id}
-                                player={player}
-                                alliance={alliance}
-                                towns={towns.filter(town => town.playerId === player.id)}
-                                allianceColours={allianceColours}
-                            />
-                        )
-                    })
-            }
+            {players.map(player => {
+                const alliance = alliances.find(a => a.id === player.alliance) || NON_TOP_ALLIANCE
+                return (
+                    <LeafletPlayer
+                        key={player.id}
+                        player={player}
+                        alliance={alliance}
+                        towns={towns.filter(town => town.playerId === player.id)}
+                        allianceColours={allianceColours}
+                    />
+                )
+            })}
         </LayerGroup>
     )
 }

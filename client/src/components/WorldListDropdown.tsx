@@ -4,7 +4,9 @@ import { World } from "../types/World"
 import classes from "./WorldListDropdown.module.scss"
 import WorldListDropdownOption from "./WorldListDropdownOption"
 
-const WorldListDropdown = ({ worlds }: { worlds: World[] }) => {
+type WorldListDropdownProps = { worlds: World[] }
+
+const WorldListDropdown = ({ worlds }: WorldListDropdownProps) => {
     const [showingOptions, setShowingOptions] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
 
@@ -31,30 +33,58 @@ const WorldListDropdown = ({ worlds }: { worlds: World[] }) => {
     return (
         <div ref={ref} className="d-flex flex-column position-relative">
             <div
-                className={`d-flex justify-content-between align-items-center px-4 py-2 ${classes.dropdown} ${showingOptions && classes.open}`}
+                className={`d-flex justify-content-between align-items-center px-4 py-2 ${
+                    classes.dropdown
+                } ${showingOptions && classes.open}`}
                 role="button"
                 onClick={() => setShowingOptions(!showingOptions)}
             >
                 <div></div>
                 <div>
-                    {
-                        selectedWorld != undefined ? <WorldListDropdownOption world={selectedWorld} onClick={() => undefined} /> : "Select a world"
-                    }
+                    {selectedWorld != undefined ? (
+                        <WorldListDropdownOption world={selectedWorld} onClick={() => undefined} />
+                    ) : (
+                        "Select a world"
+                    )}
                 </div>
                 <div className="d-flex align-items-center">
-                    <i className={`position-absolute fa-solid fa-chevron-right ${classes.chevron} ${showingOptions && classes.chevronRotated}`} />
+                    <i
+                        className={`position-absolute fa-solid fa-chevron-right ${
+                            classes.chevron
+                        } ${showingOptions && classes.chevronRotated}`}
+                    />
                 </div>
             </div>
             <div>
-                <div className={`position-absolute overflow-hidden w-100 ${classes.optionsContainer} ${showingOptions && classes.open}`}>
-                    <div className={`d-flex flex-column overflow-auto w-100 ${classes.options} ${showingOptions && classes.open}`}>
-                        {
-                            worlds.filter(world => !world.isClosed).map(world => <WorldListDropdownOption key={world.id} world={world} onClick={() => onSelectWorld(world)} />)
-                        }
+                <div
+                    className={`position-absolute overflow-hidden w-100 ${
+                        classes.optionsContainer
+                    } ${showingOptions && classes.open}`}
+                >
+                    <div
+                        className={`d-flex flex-column overflow-auto w-100 ${classes.options} ${
+                            showingOptions && classes.open
+                        }`}
+                    >
+                        {worlds
+                            .filter(world => !world.isClosed)
+                            .map(world => (
+                                <WorldListDropdownOption
+                                    key={world.id}
+                                    world={world}
+                                    onClick={() => onSelectWorld(world)}
+                                />
+                            ))}
                         <div className="d-flex flex-grow-1 border mx-3 " />
-                        {
-                            worlds.filter(world => world.isClosed).map(world => <WorldListDropdownOption key={world.id} world={world} onClick={() => onSelectWorld(world)} />)
-                        }
+                        {worlds
+                            .filter(world => world.isClosed)
+                            .map(world => (
+                                <WorldListDropdownOption
+                                    key={world.id}
+                                    world={world}
+                                    onClick={() => onSelectWorld(world)}
+                                />
+                            ))}
                     </div>
                 </div>
             </div>

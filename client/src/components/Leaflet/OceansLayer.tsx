@@ -4,7 +4,9 @@ import useSelection from "../../hooks/useSelection"
 import sea from "../../img/sea.png"
 import { OceanRenderOption } from "../../types/enums/OceanRenderOption"
 
-const OceansLayer = ({ renderOption }: { renderOption: string }) => {
+type OceansLayerProps = { renderOption: string }
+
+const OceansLayer = ({ renderOption }: OceansLayerProps) => {
     const { selectedWorldId } = useSelection()
 
     const getOceanUrl = (xIndex: number, yIndex: number): string => {
@@ -28,26 +30,19 @@ const OceansLayer = ({ renderOption }: { renderOption: string }) => {
 
     return (
         <LayerGroup>
-            {
-                [...Array(10)].map((_, xIndex) =>
-                    [...Array(10)].map((_, yIndex) =>
-                        <ImageOverlay
-                            key={`${xIndex}-${yIndex}`}
-                            url={getOceanUrl(xIndex, yIndex)}
-                            errorOverlayUrl={sea}
-                            bounds={[
-                                [
-                                    (9 - yIndex) * 100,
-                                    xIndex * 100
-                                ], [
-                                    ((9 - yIndex) * 100) + 100,
-                                    (xIndex * 100) + 100
-                                ]
-                            ]}
-                        />
-                    )
-                )
-            }
+            {[...Array(10)].map((_, xIndex) =>
+                [...Array(10)].map((_, yIndex) => (
+                    <ImageOverlay
+                        key={`${xIndex}-${yIndex}`}
+                        url={getOceanUrl(xIndex, yIndex)}
+                        errorOverlayUrl={sea}
+                        bounds={[
+                            [(9 - yIndex) * 100, xIndex * 100],
+                            [(9 - yIndex) * 100 + 100, xIndex * 100 + 100]
+                        ]}
+                    />
+                ))
+            )}
         </LayerGroup>
     )
 }

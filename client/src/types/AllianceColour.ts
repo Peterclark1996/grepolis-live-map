@@ -1,4 +1,4 @@
 export type AllianceColour = {
-    id: number,
+    id: number
     colour: string
 }

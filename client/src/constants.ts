@@ -31,5 +31,5 @@ export const ALLIANCE_COLOURS = [
     "#CD69C9",
     "#C95700",
     "#008DD4",
-    "#C4F0C0",
+    "#C4F0C0"
 ]
