@@ -42,6 +42,17 @@ resource "azurerm_storage_account" "main" {
         max_age_in_seconds = 3600
         }
     }
+
+  custom_domain {
+    name = "grepolislivemap.com"
+    use_subdomain = true
+  }
+
+  lifecycle {
+    ignore_changes = [
+      custom_domain[0].use_subdomain
+    ]
+  }
 }
 
 resource "azurerm_service_plan" "main" {
