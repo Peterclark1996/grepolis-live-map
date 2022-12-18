@@ -119,7 +119,10 @@ const App = () => {
         if (worldDataQuery.errored)
             return (
                 <div className="d-flex justify-content-center w-75">
-                    <ErrorBox message="Failed to fetch world data" />
+                    <ErrorBox
+                        message="Failed to fetch world data"
+                        subMessage="This is usually due to the world closing before this project was started"
+                    />
                 </div>
             )
         if (worldDataQuery.loading)
@@ -145,13 +148,20 @@ const App = () => {
 
     const hasWorldData = worldDataQuery.data !== undefined
 
+    const hasWorldDates =
+        infoQuery.data?.avialableDates !== undefined && infoQuery.data?.avialableDates.length > 0
+
     return (
         <div className="app bg-secondary">
             <div className="app bg-secondary">
                 <div className="d-flex flex-grow-1 justify-content-center">
                     <div className="d-flex flex-column w-25 pt-4 px-4">
                         {getWorldListDropdown()}
-                        <div className="d-flex justify-content-center mt-2">{getDatePicker()}</div>
+                        {hasWorldDates && (
+                            <div className="d-flex justify-content-center mt-2">
+                                {getDatePicker()}
+                            </div>
+                        )}
                         {hasWorldData && (
                             <>
                                 <div className="d-flex justify-content-center mt-2">
