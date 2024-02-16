@@ -31,7 +31,7 @@ const DatePicker = ({ dates }: DatePickerProps) => {
                 type="date"
                 min={sortedDates[sortedDates.length - 1].replaceAll("_", "-")}
                 max={sortedDates[0].replaceAll("_", "-")}
-                value={selectedDate?.replaceAll("_", "-") || sortedDates[0].replaceAll("_", "-")}
+                value={selectedDate?.replaceAll("_", "-") ?? sortedDates[0].replaceAll("_", "-")}
                 onChange={event => onDatePicked(event.target.value.replaceAll("-", "_"))}
             />
         </div>

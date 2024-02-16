@@ -52,7 +52,7 @@ export const islandImagesNames = {
     57: "uninhabited17.png",
     58: "uninhabited18.png",
     59: "uninhabited19.png",
-    60: "uninhabited20.png",
+    60: "uninhabited20.png"
 }
 
 export const islandPositionOffsetMatrix: IslandOffset[] = [

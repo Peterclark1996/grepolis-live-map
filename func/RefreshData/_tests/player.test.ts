@@ -1,7 +1,6 @@
 import { act, createWorldStatus, randomNumber, randomString } from "./common"
 
-test('Player data is fetched and saved to blob', async () => {
-
+test("Player data is fetched and saved to blob", async () => {
     const inputPlayer = {
         id: randomNumber(),
         name: randomString(),
@@ -18,12 +17,14 @@ test('Player data is fetched and saved to blob', async () => {
 
     expect(saveWorldDataFile.mock.calls.length).toBe(1)
     expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")
-    expect(saveWorldDataFile.mock.calls[0][2]).toStrictEqual({ alliances: [], players: [inputPlayer], towns: [] })
-
+    expect(saveWorldDataFile.mock.calls[0][2]).toStrictEqual({
+        alliances: [],
+        players: [inputPlayer],
+        towns: []
+    })
 })
 
-test('Players with no towns are not saved to blob', async () => {
-
+test("Players with no towns are not saved to blob", async () => {
     const validInputPlayer = {
         id: randomNumber(),
         name: randomString(),
@@ -48,6 +49,9 @@ test('Players with no towns are not saved to blob', async () => {
 
     expect(saveWorldDataFile.mock.calls.length).toBe(1)
     expect(saveWorldDataFile.mock.calls[0][0]).toStrictEqual("en01")
-    expect(saveWorldDataFile.mock.calls[0][2]).toStrictEqual({ alliances: [], players: [validInputPlayer], towns: [] })
-
+    expect(saveWorldDataFile.mock.calls[0][2]).toStrictEqual({
+        alliances: [],
+        players: [validInputPlayer],
+        towns: []
+    })
 })

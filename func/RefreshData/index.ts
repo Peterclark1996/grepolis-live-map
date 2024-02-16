@@ -1,6 +1,13 @@
 import { AzureFunction, Context } from "@azure/functions"
 import Jimp from "jimp/"
-import { getOceanFileNames, getWorldDataFileNames, saveOceanFile, saveWorldDataFile, saveWorldInfo, saveWorldList } from "./blob"
+import {
+    getOceanFileNames,
+    getWorldDataFileNames,
+    saveOceanFile,
+    saveWorldDataFile,
+    saveWorldInfo,
+    saveWorldList
+} from "./blob"
 import { IMAGE_PATH } from "./constants"
 import { fetchAlliances, fetchIslands, fetchPlayers, fetchTowns, fetchWorldList } from "./grepolis"
 import { generateDataForWorlds } from "./logic"
@@ -25,7 +32,8 @@ const timerTrigger: AzureFunction = async (context: Context, myTimer: any): Prom
         getOceanFileNames
     }
 
-    const getImageFromFile = (imageFileName: string): Promise<Jimp> => Jimp.read(IMAGE_PATH + imageFileName)
+    const getImageFromFile = (imageFileName: string): Promise<Jimp> =>
+        Jimp.read(IMAGE_PATH + imageFileName)
 
     return generateDataForWorlds(
         grepolisFunctions,

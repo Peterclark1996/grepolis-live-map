@@ -26,7 +26,7 @@ const TabbedOptions = ({
                     <div
                         key={option.value}
                         className={`px-3 ${
-                            selectedOption === option.value && classes.selectedOption
+                            selectedOption === option.value ? classes.selectedOption : ""
                         }`}
                         role="button"
                         onClick={() => setSelectedOption(option.value)}
