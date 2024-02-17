@@ -1,5 +1,5 @@
 import { Layer } from "leaflet"
-import { useState } from "react"
+import { RefObject, useState } from "react"
 import { DEFAULT_ALLIANCE_COLOUR } from "../constants"
 import { Alliance } from "../types/Alliance"
 import { AllianceColour } from "../types/AllianceColour"
@@ -11,8 +11,8 @@ type AllianceListProps = {
     alliances: Alliance[]
     allianceColours: AllianceColour[]
     allianceLayers: LeafletLayer[]
-    showLayer: (ref: React.RefObject<Layer>) => void
-    hideLayer: (ref: React.RefObject<Layer>) => void
+    showLayer: (ref: RefObject<Layer>) => void
+    hideLayer: (ref: RefObject<Layer>) => void
 }
 
 const AllianceList = ({

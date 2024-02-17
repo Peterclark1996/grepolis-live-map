@@ -1,6 +1,7 @@
 import { Layer } from "leaflet"
+import { RefObject } from "react"
 
 export type LeafletLayer = {
     id: number
-    ref: React.RefObject<Layer>
+    ref: RefObject<Layer>
 }

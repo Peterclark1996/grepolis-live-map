@@ -1,5 +1,5 @@
 import { Layer } from "leaflet"
-import { useEffect, useRef } from "react"
+import { RefObject, useEffect, useRef } from "react"
 import { LayerGroup } from "react-leaflet"
 import { Alliance } from "../../types/Alliance"
 import { AllianceColour } from "../../types/AllianceColour"
@@ -12,7 +12,7 @@ type AllianceLayerProps = {
     players: Player[]
     towns: Town[]
     allianceColours: AllianceColour[]
-    setAllianceLayer: (allianceId: number, ref: React.RefObject<Layer>) => void
+    setAllianceLayer: (allianceId: number, ref: RefObject<Layer>) => void
 }
 
 const AllianceLayer = ({

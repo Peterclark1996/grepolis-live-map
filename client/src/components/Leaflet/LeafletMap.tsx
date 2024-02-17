@@ -5,15 +5,15 @@ import L, { Layer } from "leaflet"
 import { WorldData } from "../../types/WorldData"
 import AllianceLayer from "./AllianceLayer"
 import { AllianceColour } from "../../types/AllianceColour"
-import { useMemo } from "react"
+import { RefObject, useMemo } from "react"
 import NonTopAlliancePlayersLayer from "./NonTopAlliancePlayersLayer"
 
 type LeafletMapProps = {
     worldData: WorldData
     allianceColours: AllianceColour[]
     oceanRenderOption: string
-    setAllianceLayer: (allianceId: number, ref: React.RefObject<Layer>) => void
-    setNonTopAlliancePlayersLayer: (ref: React.RefObject<Layer>) => void
+    setAllianceLayer: (allianceId: number, ref: RefObject<Layer>) => void
+    setNonTopAlliancePlayersLayer: (ref: RefObject<Layer>) => void
     setMap: (map: L.Map) => void
 }
 

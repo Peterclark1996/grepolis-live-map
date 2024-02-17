@@ -1,6 +1,6 @@
 import { Layer } from "leaflet"
 import { LayerGroup } from "react-leaflet"
-import { useEffect, useRef } from "react"
+import { RefObject, useEffect, useRef } from "react"
 import { NON_TOP_ALLIANCE } from "../../constants"
 import { Alliance } from "../../types/Alliance"
 import { AllianceColour } from "../../types/AllianceColour"
@@ -13,7 +13,7 @@ type NonTopAlliancePlayersLayerProps = {
     alliances: Alliance[]
     towns: Town[]
     allianceColours: AllianceColour[]
-    setNonTopAlliancePlayersLayer: (ref: React.RefObject<Layer>) => void
+    setNonTopAlliancePlayersLayer: (ref: RefObject<Layer>) => void
 }
 
 const NonTopAlliancePlayersLayer = ({
