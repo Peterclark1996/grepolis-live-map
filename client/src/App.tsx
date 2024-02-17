@@ -1,5 +1,5 @@
 import { Layer } from "leaflet"
-import { RefObject, useCallback, useEffect, useMemo, useState } from "react"
+import { RefObject, useEffect, useState } from "react"
 import AllianceList from "./components/AllianceList"
 import DatePicker from "./components/DatePicker"
 import ErrorBox from "./components/ErrorBox"
@@ -10,7 +10,6 @@ import WorldListDropdown from "./components/WorldListDropdown"
 import { DEFAULT_COLOURS, ALLIANCE_COUNT_TO_SHOW, BASE_CONTENT_URL, ISLAND_RENDER_OPTIONS } from "./constants"
 import useApi from "./hooks/useApi"
 import useSelection from "./hooks/useSelection"
-import { AllianceColour } from "./types/AllianceColour"
 import { LeafletLayer } from "./types/LeafletLayer"
 import { World } from "./types/World"
 import { WorldData } from "./types/WorldData"
@@ -24,6 +23,7 @@ const App = () => {
     const [greyPlayerLayer, setGreyPlayerLayer] = useState<Layer | null>(null)
     const [map, setMap] = useState<L.Map>()
     const { selectedWorldId, setSelectedWorld, selectedDate } = useSelection()
+    const options = useOptions()
 
     const worldsQuery = useApi<World[]>(`${BASE_CONTENT_URL}/worlds.json`)
     const infoQuery = useApi<WorldInfo>(`${BASE_CONTENT_URL}/${selectedWorldId}/info.json`, selectedWorldId !== undefined)
@@ -31,8 +31,6 @@ const App = () => {
         `${BASE_CONTENT_URL}/${selectedWorldId}/data/${selectedDate}.json`,
         selectedWorldId !== undefined && selectedDate !== undefined
     )
-
-    const options = useOptions()
 
     useEffect(() => {
         if (selectedWorldId !== undefined) return
@@ -44,28 +42,16 @@ const App = () => {
         setSelectedWorld(openWorlds[0])
     }, [selectedWorldId, setSelectedWorld, worldsQuery.data])
 
-    const topAlliances = useMemo(
-        () =>
-            worldDataQuery.data === undefined
-                ? []
-                : worldDataQuery.data.alliances.sort((a, b) => (a.points < b.points ? 1 : -1)).slice(0, ALLIANCE_COUNT_TO_SHOW),
-        [worldDataQuery.data]
-    )
+    const topAlliances =
+        worldDataQuery.data === undefined ? [] : worldDataQuery.data.alliances.sort((a, b) => (a.points < b.points ? 1 : -1)).slice(0, ALLIANCE_COUNT_TO_SHOW)
 
-    const allianceColours: AllianceColour[] = useMemo(
-        () =>
-            topAlliances.map((alliance, index) => ({
-                id: alliance.id,
-                colour: DEFAULT_COLOURS[index]
-            })),
-        [topAlliances]
-    )
+    const allianceColours = topAlliances.map((alliance, index) => ({
+        id: alliance.id,
+        colour: DEFAULT_COLOURS[index]
+    }))
 
-    const setAllianceLayer = useCallback(
-        (allianceId: number, ref: RefObject<Layer>) =>
-            setAllianceLayers(allianceLayers => [...allianceLayers.filter(layer => layer.id != allianceId), { id: allianceId, ref }]),
-        []
-    )
+    const setAllianceLayer = (allianceId: number, ref: RefObject<Layer>) =>
+        setAllianceLayers(allianceLayers => [...allianceLayers.filter(layer => layer.id != allianceId), { id: allianceId, ref }])
 
     const showLayer = (ref: RefObject<Layer>) => {
         if (map === undefined) return
