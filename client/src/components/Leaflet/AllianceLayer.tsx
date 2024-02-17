@@ -6,6 +6,7 @@ import { AllianceColour } from "../../types/AllianceColour"
 import { Player } from "../../types/Player"
 import { Town } from "../../types/Town"
 import LeafletPlayer from "./LeafletPlayer"
+import useOptions from "../../hooks/useOptions"
 
 type AllianceLayerProps = {
     alliance: Alliance
@@ -18,7 +19,13 @@ type AllianceLayerProps = {
 const AllianceLayer = ({ alliance, players, towns, allianceColours, setAllianceLayer }: AllianceLayerProps) => {
     const ref = useRef(null)
 
+    const options = useOptions()
+
     useEffect(() => setAllianceLayer(alliance.id, ref), [setAllianceLayer, alliance.id])
+
+    if (options.hiddenAllianceIds.includes(alliance.id)) {
+        return null
+    }
 
     return (
         <LayerGroup ref={ref}>

@@ -5,6 +5,7 @@ type Options = {
     islands: (typeof ISLAND_RENDER_OPTIONS)[number]
     greyPlayers: boolean
     cityScale: number
+    hiddenAllianceIds: number[]
     setOption: (action: OptionSetActions) => void
 }
 
@@ -21,6 +22,10 @@ type OptionSetActions =
           key: "cityScale"
           value: number
       }
+    | {
+          key: "hiddenAllianceIds"
+          value: number[]
+      }
 
 const useOptions = () => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -32,6 +37,13 @@ const useOptions = () => {
 
     const cityScale = parseFloat(searchParams.get("cityScale") ?? "100")
 
+    const hiddenAllianceIds =
+        searchParams
+            .get("hiddenAllianceIds")
+            ?.split(",")
+            .map(id => parseInt(id))
+            .filter(id => !Number.isNaN(id)) ?? []
+
     const setOption = (action: OptionSetActions) => {
         const currentOptions = {
             islands,
@@ -39,9 +51,11 @@ const useOptions = () => {
             cityScale: cityScale.toString()
         }
 
+        const value = Array.isArray(action.value) ? action.value.join(",") : action.value.toString()
+
         const updatedOptions = {
             ...currentOptions,
-            [action.key]: action.value.toString()
+            [action.key]: value
         }
 
         setSearchParams(updatedOptions)
@@ -51,6 +65,7 @@ const useOptions = () => {
         islands,
         greyPlayers,
         cityScale,
+        hiddenAllianceIds,
         setOption
     }
 
