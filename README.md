@@ -6,7 +6,7 @@ https://grepolislivemap.com/
 
 ## Options
 
-The url is https://grepolislivemap.com/<world-code>/<date> where `world-code` is the greplis world code, for example en100 and `date` is a date in for form yyyy_MM_dd
+The url is `https://grepolislivemap.com/<world-code>/<date>` where `<world-code>` is the greplis world code, for example en123 and `<date>` is a date in the form yyyy_MM_dd
 
 The allowed query params are:
 - islands: `none | center | outer | all`
