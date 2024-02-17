@@ -1,9 +1,16 @@
-.title {
+.button {
+    all: unset;
+
     background-color: white;
-    color: #3c4043;
-    user-select: none;
-    -webkit-user-select: none;
+    box-shadow: rgba(60, 64, 67, 0.5) 0 5px 5px 0, rgba(60, 64, 67, 0.25) 0 8px 15px 5px;
     border-radius: 20px;
+
+    &:disabled {
+        box-shadow: inset rgba(60, 64, 67, 0.5) 0 5px 5px 0,
+            inset rgba(60, 64, 67, 0.25) 0 8px 15px 5px;
+        color: #595b5c;
+        cursor: not-allowed;
+    }
 }
 
 .input {
