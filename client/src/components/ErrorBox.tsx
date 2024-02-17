@@ -7,7 +7,7 @@ type ErrorBoxProps = {
 
 const ErrorBox = ({ message, subMessage }: ErrorBoxProps) => {
     return (
-        <div className="m-4">
+        <div className="my-3 mx-auto">
             <div className={`d-flex flex-column align-items-center p-2 ${classes.errorBox}`}>
                 <div>
                     <i className="fa-solid fa-triangle-exclamation me-2" />
