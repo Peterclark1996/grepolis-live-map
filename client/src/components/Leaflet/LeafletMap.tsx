@@ -7,24 +7,18 @@ import AllianceLayer from "./AllianceLayer"
 import { AllianceColour } from "../../types/AllianceColour"
 import { RefObject, useMemo } from "react"
 import NonTopAlliancePlayersLayer from "./NonTopAlliancePlayersLayer"
+import { ISLAND_RENDER_OPTIONS } from "../../constants"
 
 type LeafletMapProps = {
     worldData: WorldData
     allianceColours: AllianceColour[]
-    oceanRenderOption: string
+    oceanRenderOption: (typeof ISLAND_RENDER_OPTIONS)[number]
     setAllianceLayer: (allianceId: number, ref: RefObject<Layer>) => void
     setNonTopAlliancePlayersLayer: (ref: RefObject<Layer>) => void
     setMap: (map: L.Map) => void
 }
 
-const LeafletMap = ({
-    worldData,
-    allianceColours,
-    oceanRenderOption,
-    setAllianceLayer,
-    setNonTopAlliancePlayersLayer,
-    setMap
-}: LeafletMapProps) => {
+const LeafletMap = ({ worldData, allianceColours, oceanRenderOption, setAllianceLayer, setNonTopAlliancePlayersLayer, setMap }: LeafletMapProps) => {
     const allianceLayers = useMemo(
         () =>
             worldData.alliances
@@ -61,9 +55,7 @@ const LeafletMap = ({
                 <GridLayer />
                 <OceansLayer renderOption={oceanRenderOption} />
                 <NonTopAlliancePlayersLayer
-                    players={worldData.players.filter(
-                        p => !allianceColours.find(a => a.id === p.alliance)
-                    )}
+                    players={worldData.players.filter(p => !allianceColours.find(a => a.id === p.alliance))}
                     alliances={worldData.alliances}
                     towns={worldData.towns}
                     allianceColours={allianceColours}

@@ -7,11 +7,10 @@ import LeafletMap from "./components/Leaflet/LeafletMap"
 import LoadingSpinner from "./components/LoadingSpinner"
 import TabbedOptions from "./components/TabbedOptions"
 import WorldListDropdown from "./components/WorldListDropdown"
-import { DEFAULT_COLOURS, ALLIANCE_COUNT_TO_SHOW, BASE_CONTENT_URL } from "./constants"
+import { DEFAULT_COLOURS, ALLIANCE_COUNT_TO_SHOW, BASE_CONTENT_URL, ISLAND_RENDER_OPTIONS } from "./constants"
 import useApi from "./hooks/useApi"
 import useSelection from "./hooks/useSelection"
 import { AllianceColour } from "./types/AllianceColour"
-import { OceanRenderOption } from "./types/enums/OceanRenderOption"
 import { LeafletLayer } from "./types/LeafletLayer"
 import { World } from "./types/World"
 import { WorldData } from "./types/WorldData"
@@ -19,7 +18,7 @@ import { WorldInfo } from "./types/WorldInfo"
 import classes from "./App.module.scss"
 
 const App = () => {
-    const [oceanRenderOption, setOceanRenderOption] = useState(OceanRenderOption.Outer)
+    const [oceanRenderOption, setOceanRenderOption] = useState<(typeof ISLAND_RENDER_OPTIONS)[number]>("outer")
     const [showingGreyPlayers, setShowingGreyPlayers] = useState(true)
     const [allianceLayers, setAllianceLayers] = useState<LeafletLayer[]>([])
     const [greyPlayerLayer, setGreyPlayerLayer] = useState<Layer | null>(null)
@@ -27,10 +26,7 @@ const App = () => {
     const { selectedWorldId, setSelectedWorld, selectedDate } = useSelection()
 
     const worldsQuery = useApi<World[]>(`${BASE_CONTENT_URL}/worlds.json`)
-    const infoQuery = useApi<WorldInfo>(
-        `${BASE_CONTENT_URL}/${selectedWorldId}/info.json`,
-        selectedWorldId !== undefined
-    )
+    const infoQuery = useApi<WorldInfo>(`${BASE_CONTENT_URL}/${selectedWorldId}/info.json`, selectedWorldId !== undefined)
     const worldDataQuery = useApi<WorldData>(
         `${BASE_CONTENT_URL}/${selectedWorldId}/data/${selectedDate}.json`,
         selectedWorldId !== undefined && selectedDate !== undefined
@@ -50,9 +46,7 @@ const App = () => {
         () =>
             worldDataQuery.data === undefined
                 ? []
-                : worldDataQuery.data.alliances
-                      .sort((a, b) => (a.points < b.points ? 1 : -1))
-                      .slice(0, ALLIANCE_COUNT_TO_SHOW),
+                : worldDataQuery.data.alliances.sort((a, b) => (a.points < b.points ? 1 : -1)).slice(0, ALLIANCE_COUNT_TO_SHOW),
         [worldDataQuery.data]
     )
 
@@ -67,10 +61,7 @@ const App = () => {
 
     const setAllianceLayer = useCallback(
         (allianceId: number, ref: RefObject<Layer>) =>
-            setAllianceLayers(allianceLayers => [
-                ...allianceLayers.filter(layer => layer.id != allianceId),
-                { id: allianceId, ref }
-            ]),
+            setAllianceLayers(allianceLayers => [...allianceLayers.filter(layer => layer.id != allianceId), { id: allianceId, ref }]),
         []
     )
 
@@ -118,12 +109,7 @@ const App = () => {
 
     const getMapContent = () => {
         if (worldDataQuery.errored)
-            return (
-                <ErrorBox
-                    message="Failed to fetch world data"
-                    subMessage="This is usually due to the world closing before this project was started"
-                />
-            )
+            return <ErrorBox message="Failed to fetch world data" subMessage="This is usually due to the world closing before this project was started" />
         if (worldDataQuery.loading) return <LoadingSpinner />
         if (worldDataQuery.data == undefined) return <></>
         return (
@@ -140,42 +126,28 @@ const App = () => {
 
     const hasWorldData = worldDataQuery.data !== undefined
 
-    const hasWorldDates =
-        infoQuery.data?.avialableDates !== undefined && infoQuery.data?.avialableDates.length > 0
+    const hasWorldDates = infoQuery.data?.avialableDates !== undefined && infoQuery.data?.avialableDates.length > 0
 
     return (
         <div className="app bg-secondary">
             <aside className={`d-flex flex-column gap-2 ${classes.sidePanel}`}>
                 {getWorldListDropdown()}
                 {hasWorldDates && getDatePicker()}
+                <TabbedOptions title="Islands" options={ISLAND_RENDER_OPTIONS} selectedOption={oceanRenderOption} setSelectedOption={setOceanRenderOption} />
+                <TabbedOptions
+                    title="Grey Players"
+                    options={["on", "off"]}
+                    selectedOption={showingGreyPlayers ? "on" : "off"}
+                    setSelectedOption={option => setShowingGreyPlayers(option === "on")}
+                />
                 {hasWorldData && (
-                    <>
-                        <TabbedOptions
-                            title="Islands"
-                            options={Object.entries(OceanRenderOption).map(pair => ({
-                                label: pair[0],
-                                value: pair[1]
-                            }))}
-                            selectedOption={oceanRenderOption}
-                            setSelectedOption={setOceanRenderOption}
-                        />
-                        <TabbedOptions
-                            title="Grey Players"
-                            options={[
-                                { label: "On", value: "on" },
-                                { label: "Off", value: "off" }
-                            ]}
-                            selectedOption={showingGreyPlayers ? "on" : "off"}
-                            setSelectedOption={option => setShowingGreyPlayers(option === "on")}
-                        />
-                        <AllianceList
-                            alliances={topAlliances}
-                            allianceColours={allianceColours}
-                            allianceLayers={allianceLayers}
-                            showLayer={showLayer}
-                            hideLayer={hideLayer}
-                        />
-                    </>
+                    <AllianceList
+                        alliances={topAlliances}
+                        allianceColours={allianceColours}
+                        allianceLayers={allianceLayers}
+                        showLayer={showLayer}
+                        hideLayer={hideLayer}
+                    />
                 )}
             </aside>
             {getMapContent()}

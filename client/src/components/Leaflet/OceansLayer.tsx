@@ -1,27 +1,26 @@
 import { LayerGroup, ImageOverlay } from "react-leaflet"
-import { BASE_CONTENT_URL } from "../../constants"
+import { BASE_CONTENT_URL, ISLAND_RENDER_OPTIONS } from "../../constants"
 import useSelection from "../../hooks/useSelection"
 import sea from "../../img/sea.png"
-import { OceanRenderOption } from "../../types/enums/OceanRenderOption"
 
-type OceansLayerProps = { renderOption: string }
+type OceansLayerProps = { renderOption: (typeof ISLAND_RENDER_OPTIONS)[number] }
 
 const OceansLayer = ({ renderOption }: OceansLayerProps) => {
     const { selectedWorldId } = useSelection()
 
     const getOceanUrl = (xIndex: number, yIndex: number): string => {
         switch (renderOption) {
-            case OceanRenderOption.None:
+            case "none":
                 return sea
-            case OceanRenderOption.Center:
+            case "center":
                 if (xIndex !== 4 && xIndex !== 5) return sea
                 if (yIndex !== 4 && yIndex !== 5) return sea
                 return `${BASE_CONTENT_URL}/${selectedWorldId}/ocean/${xIndex}_${yIndex}.png`
-            case OceanRenderOption.Outer:
+            case "outer":
                 if (xIndex < 3 || xIndex > 6) return sea
                 if (yIndex < 3 || yIndex > 6) return sea
                 return `${BASE_CONTENT_URL}/${selectedWorldId}/ocean/${xIndex}_${yIndex}.png`
-            case OceanRenderOption.All:
+            case "all":
                 return `${BASE_CONTENT_URL}/${selectedWorldId}/ocean/${xIndex}_${yIndex}.png`
             default:
                 return sea

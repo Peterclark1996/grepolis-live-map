@@ -13,6 +13,8 @@ export const ALLIANCE_COUNT_TO_SHOW = 12
 
 export const BASE_CONTENT_URL = config.storageAccountUrl + "world-data"
 
+export const ISLAND_RENDER_OPTIONS = ["none", "center", "outer", "all"] as const
+
 export const DEFAULT_ALLIANCE_COLOUR = "#676767"
 
 export const DEFAULT_COLOURS = [
