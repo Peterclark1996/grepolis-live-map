@@ -145,50 +145,40 @@ const App = () => {
 
     return (
         <div className="app bg-secondary">
-            <div className="d-flex flex-grow-1 justify-content-center">
-                <aside className={`d-flex flex-column gap-2 ${classes.sidePanel}`}>
-                    {getWorldListDropdown()}
-                    {hasWorldDates && (
-                        <div className="d-flex justify-content-center">{getDatePicker()}</div>
-                    )}
-                    {hasWorldData && (
-                        <>
-                            <div className="d-flex justify-content-center">
-                                <TabbedOptions
-                                    title="Oceans"
-                                    options={Object.entries(OceanRenderOption).map(pair => ({
-                                        label: pair[0],
-                                        value: pair[1]
-                                    }))}
-                                    selectedOption={oceanRenderOption}
-                                    setSelectedOption={setOceanRenderOption}
-                                />
-                            </div>
-                            <div className="d-flex justify-content-center">
-                                <TabbedOptions
-                                    title="Grey Players"
-                                    options={[
-                                        { label: "On", value: "on" },
-                                        { label: "Off", value: "off" }
-                                    ]}
-                                    selectedOption={showingGreyPlayers ? "on" : "off"}
-                                    setSelectedOption={option =>
-                                        setShowingGreyPlayers(option === "on")
-                                    }
-                                />
-                            </div>
-                            <AllianceList
-                                alliances={topAlliances}
-                                allianceColours={allianceColours}
-                                allianceLayers={allianceLayers}
-                                showLayer={showLayer}
-                                hideLayer={hideLayer}
-                            />
-                        </>
-                    )}
-                </aside>
-                {getMapContent()}
-            </div>
+            <aside className={`d-flex flex-column gap-2 ${classes.sidePanel}`}>
+                {getWorldListDropdown()}
+                {hasWorldDates && getDatePicker()}
+                {hasWorldData && (
+                    <>
+                        <TabbedOptions
+                            title="Islands"
+                            options={Object.entries(OceanRenderOption).map(pair => ({
+                                label: pair[0],
+                                value: pair[1]
+                            }))}
+                            selectedOption={oceanRenderOption}
+                            setSelectedOption={setOceanRenderOption}
+                        />
+                        <TabbedOptions
+                            title="Grey Players"
+                            options={[
+                                { label: "On", value: "on" },
+                                { label: "Off", value: "off" }
+                            ]}
+                            selectedOption={showingGreyPlayers ? "on" : "off"}
+                            setSelectedOption={option => setShowingGreyPlayers(option === "on")}
+                        />
+                        <AllianceList
+                            alliances={topAlliances}
+                            allianceColours={allianceColours}
+                            allianceLayers={allianceLayers}
+                            showLayer={showLayer}
+                            hideLayer={hideLayer}
+                        />
+                    </>
+                )}
+            </aside>
+            {getMapContent()}
         </div>
     )
 }

@@ -19,7 +19,7 @@ const TabbedOptions = ({
     setSelectedOption
 }: TabbedOptionsProps) => {
     return (
-        <div className="d-flex">
+        <div className="d-flex justify-content-center">
             <span className={`px-2 me-2 ${classes.title}`}>{title}:</span>
             <div className={`d-flex ${classes.options}`}>
                 {options.map(option => {

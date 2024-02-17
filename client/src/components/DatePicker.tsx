@@ -24,7 +24,7 @@ const DatePicker = ({ dates }: DatePickerProps) => {
     }
 
     return (
-        <div className="d-flex">
+        <div className="d-flex justify-content-center">
             <span className={`px-2 me-2 my-auto ${classes.title}`}>Date:</span>
             <input
                 className={`${classes.input} px-2`}
