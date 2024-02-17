@@ -1,13 +1,15 @@
 .dropdown {
+    all: unset;
+
     background-color: white;
     box-shadow: rgba(60, 64, 67, 1) 0 1px 3px 0, rgba(60, 64, 67, 0.5) 0 8px 15px 3px;
     color: #3c4043;
     user-select: none;
     -webkit-user-select: none;
 
-    -webkit-transition: -webkit-border-radius .05s .2s;
-    -ms-transition: -ms-border-radius .05s .2s;
-    transition: border-radius .05s .2s;
+    -webkit-transition: -webkit-border-radius 0.05s 0.2s;
+    -ms-transition: -ms-border-radius 0.05s 0.2s;
+    transition: border-radius 0.05s 0.2s;
     border-radius: 20px;
 
     &.open {
@@ -41,9 +43,9 @@
     max-height: 0px;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    -webkit-transition: -webkit-max-height .2s;
-    -ms-transition: -ms-max-height .2s;
-    transition: max-height .2s;
+    -webkit-transition: -webkit-max-height 0.2s;
+    -ms-transition: -ms-max-height 0.2s;
+    transition: max-height 0.2s;
 
     &.open {
         box-shadow: rgba(60, 64, 67, 1) 0 1px 3px 0, rgba(60, 64, 67, 0.5) 0 8px 15px 3px;
@@ -56,9 +58,9 @@
 }
 
 .chevron {
-    -webkit-transition: -webkit-transform .2s;
-    -ms-transition: -ms-transform .2s;
-    transition: transform .2s;
+    -webkit-transition: -webkit-transform 0.2s;
+    -ms-transition: -ms-transform 0.2s;
+    transition: transform 0.2s;
 
     &.chevronRotated {
         transform: rotate(90deg);

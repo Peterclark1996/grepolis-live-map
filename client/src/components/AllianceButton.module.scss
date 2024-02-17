@@ -1,4 +1,6 @@
 .toggle {
+    all: unset;
+
     background-color: white;
     box-shadow: rgba(60, 64, 67, 1) 0 1px 3px 0, rgba(60, 64, 67, 0.5) 0 8px 15px 3px;
     color: #3c4043;
@@ -7,7 +9,8 @@
     border-radius: 20px;
 
     &.selected {
-        box-shadow: inset rgba(60, 64, 67, 1) 0 1px 3px 0, inset rgba(60, 64, 67, 0.75) 0 8px 15px 3px;
+        box-shadow: inset rgba(60, 64, 67, 1) 0 1px 3px 0,
+            inset rgba(60, 64, 67, 0.75) 0 8px 15px 3px;
     }
 
     &:hover {
@@ -26,10 +29,10 @@
 }
 
 .colour {
-    box-shadow: rgba(60, 64, 67, 1) 0 1px 3px 0, rgba(60, 64, 67, 0.5) 0 8px 15px 3px;
+    box-shadow: rgba(60, 64, 67, 0.5) 0 5px 5px 0, rgba(60, 64, 67, 0.25) 0 8px 15px 5px;
     border-radius: 20px;
 
-    input[type=checkbox] {
+    input[type="checkbox"] {
         -ms-transform: scale(1.5);
         -moz-transform: scale(1.5);
         -webkit-transform: scale(1.5);

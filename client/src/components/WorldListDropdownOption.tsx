@@ -1,17 +1,20 @@
 import { World } from "../types/World"
 import classes from "./WorldListDropdownOption.module.scss"
 
-type WorldListDropdownOptionProps = { world: World; onClick: () => void }
+type WorldListDropdownOptionProps = {
+    world: World
+    onClick?: () => void
+}
 
 const WorldListDropdownOption = ({ world, onClick }: WorldListDropdownOptionProps) => {
     return (
-        <div
+        <option
             className={`d-flex justify-content-center py-1 ${classes.option}`}
-            role="button"
-            onClick={onClick}
+            onClick={onClick && onClick}
+            value={world.id}
         >
-            <span>{`${world.id} ${world.name}`}</span>
-        </div>
+            {`${world.id} ${world.name}`}
+        </option>
     )
 }
 export default WorldListDropdownOption

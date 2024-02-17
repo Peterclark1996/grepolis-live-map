@@ -32,17 +32,16 @@ const WorldListDropdown = ({ worlds }: WorldListDropdownProps) => {
 
     return (
         <div ref={ref} className="d-flex flex-column position-relative">
-            <div
+            <button
                 className={`d-flex justify-content-between align-items-center px-4 py-2 ${
                     classes.dropdown
                 } ${showingOptions && classes.open}`}
-                role="button"
                 onClick={() => setShowingOptions(!showingOptions)}
             >
-                <div></div>
+                <div />
                 <div>
                     {selectedWorld != undefined ? (
-                        <WorldListDropdownOption world={selectedWorld} onClick={() => undefined} />
+                        <WorldListDropdownOption world={selectedWorld} />
                     ) : (
                         "Select a world"
                     )}
@@ -54,7 +53,7 @@ const WorldListDropdown = ({ worlds }: WorldListDropdownProps) => {
                         } ${showingOptions && classes.chevronRotated}`}
                     />
                 </div>
-            </div>
+            </button>
             <div>
                 <div
                     className={`position-absolute overflow-hidden w-100 ${
@@ -75,7 +74,7 @@ const WorldListDropdown = ({ worlds }: WorldListDropdownProps) => {
                                     onClick={() => onSelectWorld(world)}
                                 />
                             ))}
-                        <div className="d-flex flex-grow-1 border mx-3 " />
+                        <div className="d-flex flex-grow-1 border mx-3" />
                         {worlds
                             .filter(world => world.isClosed)
                             .map(world => (

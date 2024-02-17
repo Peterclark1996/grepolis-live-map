@@ -1,3 +1,9 @@
-.option:hover {
-    color: #174ea6;
+.option {
+    all: unset;
+
+    cursor: pointer;
+
+    &:hover {
+        color: #174ea6;
+    }
 }

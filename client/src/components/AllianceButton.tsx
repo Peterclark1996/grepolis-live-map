@@ -15,10 +15,9 @@ type AllianceButtonProps = {
 
 const AllianceButton = ({ alliance, position, colour, selected, onClick }: AllianceButtonProps) => {
     return (
-        <div
+        <button
             className={`d-flex my-1 ${classes.toggle} ${selected && classes.selected}`}
             onClick={onClick}
-            role="button"
         >
             <div
                 className={`d-flex flex-grow-1 ${classes.background}`}
@@ -53,7 +52,7 @@ const AllianceButton = ({ alliance, position, colour, selected, onClick }: Allia
                     </div>
                 </div>
             </div>
-        </div>
+        </button>
     )
 }
 
