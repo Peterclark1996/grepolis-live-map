@@ -4,11 +4,12 @@ This project is a live map for the browser game Grepolis. It stores the publicly
 Currently this project is hosted at:
 https://grepolislivemap.com/
 
-## Implementation
+## Options
 
-### Back-end
-- An Azure function built as a TypeScript Node app that fetches the latest Grepolis world data for every open world once an hour. This data is hosted publically by Grepolis at {world-code}.grepolis.com/data/{file-name}.txt
+The url is https://grepolislivemap.com/<world-code>/<date> where `world-code` is the greplis world code, for example en100 and `date` is a date in for form yyyy_MM_dd
 
-### Front-end
-- React + TypeScript front end, built with Vite
-- A storage account deployed into Azure that hosts the front end application, that is built as a single page application static web app
+The allowed query params are:
+- islands: `none | center | outer | all`
+- greyPlayers: `true | false`
+- cityScale: `50...300`
+- fullscreen: `true | false`
