@@ -97,7 +97,12 @@ const App = () => {
 
     const getMapContent = () => {
         if (worldDataQuery.errored)
-            return <ErrorBox message="Failed to fetch world data" subMessage="This is usually due to the world closing before this project was started" />
+            return (
+                <ErrorBox
+                    message="Failed to fetch world data"
+                    subMessage="This is usually due to the world closing before this project was started, or the date specified being outside the range that this world was open for"
+                />
+            )
         if (worldDataQuery.loading) return <LoadingSpinner />
         if (worldDataQuery.data == undefined) return <></>
         return (

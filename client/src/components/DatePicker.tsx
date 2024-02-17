@@ -10,7 +10,7 @@ const DatePicker = ({ dates }: DatePickerProps) => {
     const sortedDates = dates.sort((a, b) => (a < b ? 1 : -1))
 
     useEffect(() => {
-        if (selectedDate !== undefined && dates.includes(selectedDate)) return
+        if (selectedDate !== undefined) return
         setSelectedDate(sortedDates[0])
     }, [sortedDates, selectedDate, setSelectedDate, dates])
 
@@ -50,11 +50,7 @@ const DatePicker = ({ dates }: DatePickerProps) => {
 
     return (
         <div className="d-flex justify-content-center gap-2">
-            <button
-                className={`px-2 ${classes.button}`}
-                onClick={onPreviousClicked}
-                disabled={isEarliestDate}
-            >
+            <button className={`px-2 ${classes.button}`} onClick={onPreviousClicked} disabled={isEarliestDate}>
                 <i className="fa-solid fa-backward" />
             </button>
             <input
@@ -65,18 +61,10 @@ const DatePicker = ({ dates }: DatePickerProps) => {
                 value={selectedDate?.replaceAll("_", "-") ?? sortedDates[0].replaceAll("_", "-")}
                 onChange={event => onDatePicked(event.target.value.replaceAll("-", "_"))}
             />
-            <button
-                className={`px-2 ${classes.button}`}
-                onClick={onNextClicked}
-                disabled={isLatestDate}
-            >
+            <button className={`px-2 ${classes.button}`} onClick={onNextClicked} disabled={isLatestDate}>
                 <i className="fa-solid fa-forward" />
             </button>
-            <button
-                className={`flex px-2 ${classes.button}`}
-                onClick={onLatestClicked}
-                disabled={isLatestDate}
-            >
+            <button className={`flex px-2 ${classes.button}`} onClick={onLatestClicked} disabled={isLatestDate}>
                 <span className="me-2">Latest</span>
                 <i className="fa-solid fa-forward-step" />
             </button>
