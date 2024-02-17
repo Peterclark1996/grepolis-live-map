@@ -7,19 +7,19 @@ import AllianceLayer from "./AllianceLayer"
 import { AllianceColour } from "../../types/AllianceColour"
 import { RefObject, useMemo } from "react"
 import NonTopAlliancePlayersLayer from "./NonTopAlliancePlayersLayer"
-import { ISLAND_RENDER_OPTIONS } from "../../constants"
+import useOptions from "../../hooks/useOptions"
 
 type LeafletMapProps = {
     worldData: WorldData
     allianceColours: AllianceColour[]
-    oceanRenderOption: (typeof ISLAND_RENDER_OPTIONS)[number]
-    townScale: number
     setAllianceLayer: (allianceId: number, ref: RefObject<Layer>) => void
     setNonTopAlliancePlayersLayer: (ref: RefObject<Layer>) => void
     setMap: (map: L.Map) => void
 }
 
-const LeafletMap = ({ worldData, allianceColours, oceanRenderOption, townScale, setAllianceLayer, setNonTopAlliancePlayersLayer, setMap }: LeafletMapProps) => {
+const LeafletMap = ({ worldData, allianceColours, setAllianceLayer, setNonTopAlliancePlayersLayer, setMap }: LeafletMapProps) => {
+    const options = useOptions()
+
     const allianceLayers = useMemo(
         () =>
             worldData.alliances
@@ -32,10 +32,10 @@ const LeafletMap = ({ worldData, allianceColours, oceanRenderOption, townScale, 
                         towns={worldData.towns}
                         allianceColours={allianceColours}
                         setAllianceLayer={setAllianceLayer}
-                        townScale={townScale}
                     />
                 )),
-        [setAllianceLayer, allianceColours, worldData.alliances, worldData.players, worldData.towns, townScale]
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [setAllianceLayer, allianceColours, worldData.alliances, worldData.players, worldData.towns, options.cityScale]
     )
 
     const map = useMemo(() => {
@@ -55,20 +55,19 @@ const LeafletMap = ({ worldData, allianceColours, oceanRenderOption, townScale, 
                 ref={setMap}
             >
                 <GridLayer />
-                <OceansLayer renderOption={oceanRenderOption} />
+                <OceansLayer />
                 <NonTopAlliancePlayersLayer
                     players={worldData.players.filter(p => !allianceColours.find(a => a.id === p.alliance))}
                     alliances={worldData.alliances}
                     towns={worldData.towns}
                     allianceColours={allianceColours}
                     setNonTopAlliancePlayersLayer={setNonTopAlliancePlayersLayer}
-                    townScale={townScale}
                 />
                 {allianceLayers}
             </MapContainer>
         )
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [oceanRenderOption, townScale])
+    }, [options.islands, options.cityScale])
 
     return map
 }

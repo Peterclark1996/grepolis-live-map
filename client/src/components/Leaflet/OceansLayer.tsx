@@ -1,15 +1,16 @@
 import { LayerGroup, ImageOverlay } from "react-leaflet"
-import { BASE_CONTENT_URL, ISLAND_RENDER_OPTIONS } from "../../constants"
+import { BASE_CONTENT_URL } from "../../constants"
 import useSelection from "../../hooks/useSelection"
 import sea from "../../img/sea.png"
+import useOptions from "../../hooks/useOptions"
 
-type OceansLayerProps = { renderOption: (typeof ISLAND_RENDER_OPTIONS)[number] }
-
-const OceansLayer = ({ renderOption }: OceansLayerProps) => {
+const OceansLayer = () => {
     const { selectedWorldId } = useSelection()
 
+    const options = useOptions()
+
     const getOceanUrl = (xIndex: number, yIndex: number): string => {
-        switch (renderOption) {
+        switch (options.islands) {
             case "none":
                 return sea
             case "center":

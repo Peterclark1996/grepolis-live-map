@@ -10,17 +10,21 @@ import pointsIcon from "../../img/icon_points.png"
 import townIcon from "../../img/icon_town.png"
 import { renderNumberAsString } from "../../helpers"
 import classes from "./LeafletPlayer.module.scss"
+import useOptions from "../../hooks/useOptions"
 
 type LeafletPlayerProps = {
     player: Player
     alliance: Alliance
     towns: Town[]
     allianceColours: AllianceColour[]
-    townScale: number
 }
 
-const LeafletPlayer = ({ player, alliance, towns, allianceColours, townScale }: LeafletPlayerProps) => {
+const LeafletPlayer = ({ player, alliance, towns, allianceColours }: LeafletPlayerProps) => {
     const colour = allianceColours.find(c => c.id === alliance.id)?.colour || DEFAULT_ALLIANCE_COLOUR
+
+    const options = useOptions()
+
+    const townScale = options.cityScale / 100
 
     return (
         <div>

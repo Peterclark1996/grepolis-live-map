@@ -17,11 +17,9 @@ import { WorldData } from "./types/WorldData"
 import { WorldInfo } from "./types/WorldInfo"
 import classes from "./App.module.scss"
 import CityScaleSlider from "./components/CityScaleSlider"
+import useOptions from "./hooks/useOptions"
 
 const App = () => {
-    const [cityScalePercentage, setCityScalePercentage] = useState(100)
-    const [oceanRenderOption, setOceanRenderOption] = useState<(typeof ISLAND_RENDER_OPTIONS)[number]>("outer")
-    const [showingGreyPlayers, setShowingGreyPlayers] = useState(true)
     const [allianceLayers, setAllianceLayers] = useState<LeafletLayer[]>([])
     const [greyPlayerLayer, setGreyPlayerLayer] = useState<Layer | null>(null)
     const [map, setMap] = useState<L.Map>()
@@ -33,6 +31,8 @@ const App = () => {
         `${BASE_CONTENT_URL}/${selectedWorldId}/data/${selectedDate}.json`,
         selectedWorldId !== undefined && selectedDate !== undefined
     )
+
+    const options = useOptions()
 
     useEffect(() => {
         if (selectedWorldId !== undefined) return
@@ -88,12 +88,12 @@ const App = () => {
     useEffect(() => {
         if (map === undefined || map === null) return
         if (greyPlayerLayer === null) return
-        if (showingGreyPlayers) {
+        if (options.greyPlayers) {
             map.addLayer(greyPlayerLayer)
             return
         }
         map.removeLayer(greyPlayerLayer)
-    }, [greyPlayerLayer, map, showingGreyPlayers])
+    }, [greyPlayerLayer, map, options.greyPlayers])
 
     const getWorldListDropdown = () => {
         if (worldsQuery.errored) return <ErrorBox message="Failed to fetch worlds" />
@@ -118,11 +118,9 @@ const App = () => {
             <LeafletMap
                 worldData={worldDataQuery.data}
                 allianceColours={allianceColours}
-                oceanRenderOption={oceanRenderOption}
                 setAllianceLayer={setAllianceLayer}
                 setNonTopAlliancePlayersLayer={setNonTopAlliancePlayersLayer}
                 setMap={setMap}
-                townScale={cityScalePercentage / 100}
             />
         )
     }
@@ -138,18 +136,18 @@ const App = () => {
                 {hasWorldDates && (
                     <>
                         {getDatePicker()}
-                        <CityScaleSlider cityScalePercentage={cityScalePercentage} setCityScalePercentage={setCityScalePercentage} />
+                        <CityScaleSlider />
                         <TabbedOptions
                             title="Islands"
                             options={ISLAND_RENDER_OPTIONS}
-                            selectedOption={oceanRenderOption}
-                            setSelectedOption={setOceanRenderOption}
+                            selectedOption={options.islands}
+                            setSelectedOption={option => options.setOption({ key: "islands", value: option })}
                         />
                         <TabbedOptions
                             title="Grey Players"
                             options={["on", "off"]}
-                            selectedOption={showingGreyPlayers ? "on" : "off"}
-                            setSelectedOption={option => setShowingGreyPlayers(option === "on")}
+                            selectedOption={options.greyPlayers ? "on" : "off"}
+                            setSelectedOption={option => options.setOption({ key: "greyPlayers", value: option === "on" })}
                         />
                     </>
                 )}
