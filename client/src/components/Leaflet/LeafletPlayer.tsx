@@ -41,22 +41,26 @@ const LeafletPlayer = ({ player, alliance, towns, allianceColours }: LeafletPlay
                                 )}
                                 <div className="mx-auto">
                                     <img src={playerIcon} alt="Player" />
-                                    <span className="ms-1">{player.name}</span>
+                                    <span className="mx-1">{player.name}</span>
+                                    <img src={playerIcon} alt="Player" />
                                 </div>
                                 {alliance.id !== 0 && (
                                     <div className="mx-auto">
                                         <img src={allianceIcon} alt="Alliance" />
-                                        <span className="ms-1">{alliance.name}</span>
+                                        <span className="mx-1">{alliance.name}</span>
+                                        <img src={allianceIcon} alt="Alliance" />
                                     </div>
                                 )}
                                 <div className="d-flex flex-grow-1 border my-1" />
                                 <div className="mx-auto">
                                     <img src={townIcon} alt="Town" />
-                                    <span className="ms-1">{town.name}</span>
+                                    <span className="mx-1">{town.name}</span>
+                                    <img src={townIcon} alt="Town" />
                                 </div>
                                 <div className="mx-auto">
                                     <img src={pointsIcon} alt="Points" />
-                                    <span className="ms-1">{renderNumberAsString(town.points)}</span>
+                                    <span className="mx-1">{renderNumberAsString(town.points)}</span>
+                                    <img src={pointsIcon} alt="Points" />
                                 </div>
                             </div>
                         </Tooltip>
