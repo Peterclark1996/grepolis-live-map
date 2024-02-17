@@ -7,7 +7,7 @@ export const NON_TOP_ALLIANCE = {
     towns: 0,
     players: 0,
     rank: 0
-}
+} as const
 
 export const ALLIANCE_COUNT_TO_SHOW = 12
 
@@ -15,7 +15,7 @@ export const BASE_CONTENT_URL = config.storageAccountUrl + "world-data"
 
 export const DEFAULT_ALLIANCE_COLOUR = "#676767"
 
-export const ALLIANCE_COLOURS = [
+export const DEFAULT_COLOURS = [
     "#FF0000",
     "#8B5A00",
     "#FFC125",
@@ -32,4 +32,4 @@ export const ALLIANCE_COLOURS = [
     "#C95700",
     "#008DD4",
     "#C4F0C0"
-]
+] as const

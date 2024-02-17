@@ -22,18 +22,22 @@ const TabbedOptions = ({
         <div className="d-flex">
             <span className={`px-2 me-2 ${classes.title}`}>{title}:</span>
             <div className={`d-flex ${classes.options}`}>
-                {options.map(option => (
-                    <div
-                        key={option.value}
-                        className={`px-3 ${
-                            selectedOption === option.value ? classes.selectedOption : ""
-                        }`}
-                        role="button"
-                        onClick={() => setSelectedOption(option.value)}
-                    >
-                        {option.label}
-                    </div>
-                ))}
+                {options.map(option => {
+                    const onClick = () => setSelectedOption(option.value)
+
+                    const selectedClasses =
+                        selectedOption === option.value ? classes.selectedOption : ""
+
+                    return (
+                        <button
+                            key={option.value}
+                            className={`px-3 ${classes.button} ${selectedClasses}`}
+                            onClick={onClick}
+                        >
+                            {option.label}
+                        </button>
+                    )
+                })}
             </div>
         </div>
     )
