@@ -9,6 +9,7 @@ import playerIcon from "../../img/icon_player.png"
 import pointsIcon from "../../img/icon_points.png"
 import townIcon from "../../img/icon_town.png"
 import { renderNumberAsString } from "../../helpers"
+import classes from "./LeafletPlayer.module.scss"
 
 type LeafletPlayerProps = {
     player: Player
@@ -34,6 +35,11 @@ const LeafletPlayer = ({ player, alliance, towns, allianceColours }: LeafletPlay
                     >
                         <Tooltip>
                             <div className="d-flex flex-column">
+                                {player.name.toLocaleLowerCase() === "vynd" && (
+                                    <div className="lead">
+                                        🎉<span className={classes.rainbow}>Developer</span>🎉
+                                    </div>
+                                )}
                                 <div className="mx-auto">
                                     <img src={playerIcon} alt="Player" />
                                     <span className="ms-1">{player.name}</span>
