@@ -16,6 +16,7 @@ import { LeafletLayer } from "./types/LeafletLayer"
 import { World } from "./types/World"
 import { WorldData } from "./types/WorldData"
 import { WorldInfo } from "./types/WorldInfo"
+import classes from "./App.module.scss"
 
 const App = () => {
     const [oceanRenderOption, setOceanRenderOption] = useState(OceanRenderOption.Outer)
@@ -118,31 +119,22 @@ const App = () => {
     const getMapContent = () => {
         if (worldDataQuery.errored)
             return (
-                <div className="d-flex justify-content-center w-75">
-                    <ErrorBox
-                        message="Failed to fetch world data"
-                        subMessage="This is usually due to the world closing before this project was started"
-                    />
-                </div>
+                <ErrorBox
+                    message="Failed to fetch world data"
+                    subMessage="This is usually due to the world closing before this project was started"
+                />
             )
-        if (worldDataQuery.loading)
-            return (
-                <div className="d-flex justify-content-center w-75">
-                    <LoadingSpinner />
-                </div>
-            )
+        if (worldDataQuery.loading) return <LoadingSpinner />
         if (worldDataQuery.data == undefined) return <></>
         return (
-            <div className="d-flex justify-content-center w-75">
-                <LeafletMap
-                    worldData={worldDataQuery.data}
-                    allianceColours={allianceColours}
-                    oceanRenderOption={oceanRenderOption}
-                    setAllianceLayer={setAllianceLayer}
-                    setNonTopAlliancePlayersLayer={setNonTopAlliancePlayersLayer}
-                    setMap={setMap}
-                />
-            </div>
+            <LeafletMap
+                worldData={worldDataQuery.data}
+                allianceColours={allianceColours}
+                oceanRenderOption={oceanRenderOption}
+                setAllianceLayer={setAllianceLayer}
+                setNonTopAlliancePlayersLayer={setNonTopAlliancePlayersLayer}
+                setMap={setMap}
+            />
         )
     }
 
@@ -153,51 +145,49 @@ const App = () => {
 
     return (
         <div className="app bg-secondary">
-            <div className="app bg-secondary">
-                <div className="d-flex flex-grow-1 justify-content-center">
-                    <div className="d-flex flex-column w-25 pt-4 px-4 gap-2">
-                        {getWorldListDropdown()}
-                        {hasWorldDates && (
-                            <div className="d-flex justify-content-center">{getDatePicker()}</div>
-                        )}
-                        {hasWorldData && (
-                            <>
-                                <div className="d-flex justify-content-center">
-                                    <TabbedOptions
-                                        title="Oceans"
-                                        options={Object.entries(OceanRenderOption).map(pair => ({
-                                            label: pair[0],
-                                            value: pair[1]
-                                        }))}
-                                        selectedOption={oceanRenderOption}
-                                        setSelectedOption={setOceanRenderOption}
-                                    />
-                                </div>
-                                <div className="d-flex justify-content-center">
-                                    <TabbedOptions
-                                        title="Grey Players"
-                                        options={[
-                                            { label: "On", value: "on" },
-                                            { label: "Off", value: "off" }
-                                        ]}
-                                        selectedOption={showingGreyPlayers ? "on" : "off"}
-                                        setSelectedOption={option =>
-                                            setShowingGreyPlayers(option === "on")
-                                        }
-                                    />
-                                </div>
-                                <AllianceList
-                                    alliances={topAlliances}
-                                    allianceColours={allianceColours}
-                                    allianceLayers={allianceLayers}
-                                    showLayer={showLayer}
-                                    hideLayer={hideLayer}
+            <div className="d-flex flex-grow-1 justify-content-center">
+                <aside className={`d-flex flex-column gap-2 ${classes.sidePanel}`}>
+                    {getWorldListDropdown()}
+                    {hasWorldDates && (
+                        <div className="d-flex justify-content-center">{getDatePicker()}</div>
+                    )}
+                    {hasWorldData && (
+                        <>
+                            <div className="d-flex justify-content-center">
+                                <TabbedOptions
+                                    title="Oceans"
+                                    options={Object.entries(OceanRenderOption).map(pair => ({
+                                        label: pair[0],
+                                        value: pair[1]
+                                    }))}
+                                    selectedOption={oceanRenderOption}
+                                    setSelectedOption={setOceanRenderOption}
                                 />
-                            </>
-                        )}
-                    </div>
-                    {getMapContent()}
-                </div>
+                            </div>
+                            <div className="d-flex justify-content-center">
+                                <TabbedOptions
+                                    title="Grey Players"
+                                    options={[
+                                        { label: "On", value: "on" },
+                                        { label: "Off", value: "off" }
+                                    ]}
+                                    selectedOption={showingGreyPlayers ? "on" : "off"}
+                                    setSelectedOption={option =>
+                                        setShowingGreyPlayers(option === "on")
+                                    }
+                                />
+                            </div>
+                            <AllianceList
+                                alliances={topAlliances}
+                                allianceColours={allianceColours}
+                                allianceLayers={allianceLayers}
+                                showLayer={showLayer}
+                                hideLayer={hideLayer}
+                            />
+                        </>
+                    )}
+                </aside>
+                {getMapContent()}
             </div>
         </div>
     )
