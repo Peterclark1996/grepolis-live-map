@@ -122,36 +122,38 @@ const App = () => {
 
     return (
         <div className="app bg-secondary">
-            <aside className={`d-flex flex-column gap-2 ${classes.sidePanel}`}>
-                {getWorldListDropdown()}
-                {hasWorldDates && (
-                    <>
-                        {getDatePicker()}
-                        <CityScaleSlider />
-                        <TabbedOptions
-                            title="Islands"
-                            options={ISLAND_RENDER_OPTIONS}
-                            selectedOption={options.islands}
-                            setSelectedOption={option => options.setOption({ key: "islands", value: option })}
+            {!options.fullscreen && (
+                <aside className={`d-flex flex-column gap-2 ${classes.sidePanel}`}>
+                    {getWorldListDropdown()}
+                    {hasWorldDates && (
+                        <>
+                            {getDatePicker()}
+                            <CityScaleSlider />
+                            <TabbedOptions
+                                title="Islands"
+                                options={ISLAND_RENDER_OPTIONS}
+                                selectedOption={options.islands}
+                                setSelectedOption={option => options.setOption({ key: "islands", value: option })}
+                            />
+                            <TabbedOptions
+                                title="Grey Players"
+                                options={["on", "off"]}
+                                selectedOption={options.greyPlayers ? "on" : "off"}
+                                setSelectedOption={option => options.setOption({ key: "greyPlayers", value: option === "on" })}
+                            />
+                        </>
+                    )}
+                    {hasWorldData && (
+                        <AllianceList
+                            alliances={topAlliances}
+                            allianceColours={allianceColours}
+                            allianceLayers={allianceLayers}
+                            showLayer={showLayer}
+                            hideLayer={hideLayer}
                         />
-                        <TabbedOptions
-                            title="Grey Players"
-                            options={["on", "off"]}
-                            selectedOption={options.greyPlayers ? "on" : "off"}
-                            setSelectedOption={option => options.setOption({ key: "greyPlayers", value: option === "on" })}
-                        />
-                    </>
-                )}
-                {hasWorldData && (
-                    <AllianceList
-                        alliances={topAlliances}
-                        allianceColours={allianceColours}
-                        allianceLayers={allianceLayers}
-                        showLayer={showLayer}
-                        hideLayer={hideLayer}
-                    />
-                )}
-            </aside>
+                    )}
+                </aside>
+            )}
             {getMapContent()}
         </div>
     )

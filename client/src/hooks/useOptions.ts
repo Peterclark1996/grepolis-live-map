@@ -6,6 +6,7 @@ type Options = {
     greyPlayers: boolean
     cityScale: number
     hiddenAllianceIds: number[]
+    fullscreen: boolean
     setOption: (action: OptionSetActions) => void
 }
 
@@ -37,6 +38,8 @@ const useOptions = () => {
 
     const cityScale = parseFloat(searchParams.get("cityScale") ?? "100")
 
+    const fullscreen = searchParams.get("fullscreen") === "true"
+
     const hiddenAllianceIds =
         searchParams
             .get("hiddenAllianceIds")
@@ -66,6 +69,7 @@ const useOptions = () => {
         greyPlayers,
         cityScale,
         hiddenAllianceIds,
+        fullscreen,
         setOption
     }
 
