@@ -13,12 +13,13 @@ type LeafletMapProps = {
     worldData: WorldData
     allianceColours: AllianceColour[]
     oceanRenderOption: (typeof ISLAND_RENDER_OPTIONS)[number]
+    townScale: number
     setAllianceLayer: (allianceId: number, ref: RefObject<Layer>) => void
     setNonTopAlliancePlayersLayer: (ref: RefObject<Layer>) => void
     setMap: (map: L.Map) => void
 }
 
-const LeafletMap = ({ worldData, allianceColours, oceanRenderOption, setAllianceLayer, setNonTopAlliancePlayersLayer, setMap }: LeafletMapProps) => {
+const LeafletMap = ({ worldData, allianceColours, oceanRenderOption, townScale, setAllianceLayer, setNonTopAlliancePlayersLayer, setMap }: LeafletMapProps) => {
     const allianceLayers = useMemo(
         () =>
             worldData.alliances
@@ -31,9 +32,10 @@ const LeafletMap = ({ worldData, allianceColours, oceanRenderOption, setAlliance
                         towns={worldData.towns}
                         allianceColours={allianceColours}
                         setAllianceLayer={setAllianceLayer}
+                        townScale={townScale}
                     />
                 )),
-        [setAllianceLayer, allianceColours, worldData.alliances, worldData.players, worldData.towns]
+        [setAllianceLayer, allianceColours, worldData.alliances, worldData.players, worldData.towns, townScale]
     )
 
     const map = useMemo(() => {
@@ -60,12 +62,13 @@ const LeafletMap = ({ worldData, allianceColours, oceanRenderOption, setAlliance
                     towns={worldData.towns}
                     allianceColours={allianceColours}
                     setNonTopAlliancePlayersLayer={setNonTopAlliancePlayersLayer}
+                    townScale={townScale}
                 />
                 {allianceLayers}
             </MapContainer>
         )
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [oceanRenderOption])
+    }, [oceanRenderOption, townScale])
 
     return map
 }

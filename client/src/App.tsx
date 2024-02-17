@@ -16,8 +16,10 @@ import { World } from "./types/World"
 import { WorldData } from "./types/WorldData"
 import { WorldInfo } from "./types/WorldInfo"
 import classes from "./App.module.scss"
+import CityScaleSlider from "./components/CityScaleSlider"
 
 const App = () => {
+    const [cityScalePercentage, setCityScalePercentage] = useState(100)
     const [oceanRenderOption, setOceanRenderOption] = useState<(typeof ISLAND_RENDER_OPTIONS)[number]>("outer")
     const [showingGreyPlayers, setShowingGreyPlayers] = useState(true)
     const [allianceLayers, setAllianceLayers] = useState<LeafletLayer[]>([])
@@ -120,6 +122,7 @@ const App = () => {
                 setAllianceLayer={setAllianceLayer}
                 setNonTopAlliancePlayersLayer={setNonTopAlliancePlayersLayer}
                 setMap={setMap}
+                townScale={cityScalePercentage / 100}
             />
         )
     }
@@ -132,14 +135,24 @@ const App = () => {
         <div className="app bg-secondary">
             <aside className={`d-flex flex-column gap-2 ${classes.sidePanel}`}>
                 {getWorldListDropdown()}
-                {hasWorldDates && getDatePicker()}
-                <TabbedOptions title="Islands" options={ISLAND_RENDER_OPTIONS} selectedOption={oceanRenderOption} setSelectedOption={setOceanRenderOption} />
-                <TabbedOptions
-                    title="Grey Players"
-                    options={["on", "off"]}
-                    selectedOption={showingGreyPlayers ? "on" : "off"}
-                    setSelectedOption={option => setShowingGreyPlayers(option === "on")}
-                />
+                {hasWorldDates && (
+                    <>
+                        {getDatePicker()}
+                        <CityScaleSlider cityScalePercentage={cityScalePercentage} setCityScalePercentage={setCityScalePercentage} />
+                        <TabbedOptions
+                            title="Islands"
+                            options={ISLAND_RENDER_OPTIONS}
+                            selectedOption={oceanRenderOption}
+                            setSelectedOption={setOceanRenderOption}
+                        />
+                        <TabbedOptions
+                            title="Grey Players"
+                            options={["on", "off"]}
+                            selectedOption={showingGreyPlayers ? "on" : "off"}
+                            setSelectedOption={option => setShowingGreyPlayers(option === "on")}
+                        />
+                    </>
+                )}
                 {hasWorldData && (
                     <AllianceList
                         alliances={topAlliances}

@@ -13,15 +13,10 @@ type AllianceLayerProps = {
     towns: Town[]
     allianceColours: AllianceColour[]
     setAllianceLayer: (allianceId: number, ref: RefObject<Layer>) => void
+    townScale: number
 }
 
-const AllianceLayer = ({
-    alliance,
-    players,
-    towns,
-    allianceColours,
-    setAllianceLayer
-}: AllianceLayerProps) => {
+const AllianceLayer = ({ alliance, players, towns, allianceColours, setAllianceLayer, townScale }: AllianceLayerProps) => {
     const ref = useRef(null)
 
     useEffect(() => setAllianceLayer(alliance.id, ref), [setAllianceLayer, alliance.id])
@@ -37,6 +32,7 @@ const AllianceLayer = ({
                         alliance={alliance}
                         towns={towns.filter(town => town.playerId === player.id)}
                         allianceColours={allianceColours}
+                        townScale={townScale}
                     />
                 ))}
         </LayerGroup>

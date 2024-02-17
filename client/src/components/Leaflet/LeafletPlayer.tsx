@@ -16,23 +16,18 @@ type LeafletPlayerProps = {
     alliance: Alliance
     towns: Town[]
     allianceColours: AllianceColour[]
+    townScale: number
 }
 
-const LeafletPlayer = ({ player, alliance, towns, allianceColours }: LeafletPlayerProps) => {
-    const colour =
-        allianceColours.find(c => c.id === alliance.id)?.colour || DEFAULT_ALLIANCE_COLOUR
+const LeafletPlayer = ({ player, alliance, towns, allianceColours, townScale }: LeafletPlayerProps) => {
+    const colour = allianceColours.find(c => c.id === alliance.id)?.colour || DEFAULT_ALLIANCE_COLOUR
 
     return (
         <div>
             {towns
                 .filter(town => town.playerId === player.id)
                 .map(town => (
-                    <Circle
-                        key={town.id}
-                        center={[town.x, town.y]}
-                        color={colour}
-                        radius={town.size}
-                    >
+                    <Circle key={town.id} center={[town.x, town.y]} color={colour} radius={town.size * townScale}>
                         <Tooltip>
                             <div className="d-flex flex-column">
                                 {player.name.toLocaleLowerCase() === "vynd" && (
@@ -57,9 +52,7 @@ const LeafletPlayer = ({ player, alliance, towns, allianceColours }: LeafletPlay
                                 </div>
                                 <div className="mx-auto">
                                     <img src={pointsIcon} alt="Points" />
-                                    <span className="ms-1">
-                                        {renderNumberAsString(town.points)}
-                                    </span>
+                                    <span className="ms-1">{renderNumberAsString(town.points)}</span>
                                 </div>
                             </div>
                         </Tooltip>

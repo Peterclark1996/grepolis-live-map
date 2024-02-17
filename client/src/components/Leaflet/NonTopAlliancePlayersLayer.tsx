@@ -14,6 +14,7 @@ type NonTopAlliancePlayersLayerProps = {
     towns: Town[]
     allianceColours: AllianceColour[]
     setNonTopAlliancePlayersLayer: (ref: RefObject<Layer>) => void
+    townScale: number
 }
 
 const NonTopAlliancePlayersLayer = ({
@@ -21,7 +22,8 @@ const NonTopAlliancePlayersLayer = ({
     alliances,
     towns,
     allianceColours,
-    setNonTopAlliancePlayersLayer
+    setNonTopAlliancePlayersLayer,
+    townScale
 }: NonTopAlliancePlayersLayerProps) => {
     const ref = useRef(null)
 
@@ -42,6 +44,7 @@ const NonTopAlliancePlayersLayer = ({
                         alliance={alliance}
                         towns={towns.filter(town => town.playerId === player.id)}
                         allianceColours={allianceColours}
+                        townScale={townScale}
                     />
                 )
             })}
