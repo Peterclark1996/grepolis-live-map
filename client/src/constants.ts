@@ -9,7 +9,7 @@ export const NON_TOP_ALLIANCE = {
     rank: 0
 } as const
 
-export const ALLIANCE_COUNT_TO_SHOW = 12
+export const ALLIANCE_COUNT_TO_SHOW = 20
 
 export const BASE_CONTENT_URL = config.storageAccountUrl + "world-data"
 
@@ -33,5 +33,9 @@ export const DEFAULT_COLOURS = [
     "#CD69C9",
     "#C95700",
     "#008DD4",
-    "#C4F0C0"
+    "#C4F0C0",
+    "#83B19B",
+    "#BF05D0",
+    "#9C9289",
+    "#2DD09C"
 ] as const
